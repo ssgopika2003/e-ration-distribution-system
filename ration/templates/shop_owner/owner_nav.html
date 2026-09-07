@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Kerala Ration Shop Owner{% endblock %}</title>
+    
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        --primary: #2c3e50;
+        --secondary: #3498db;
+        --accent: #e74c3c;
+        --success: #27ae60;
+        --warning: #f39c12;
+        --info: #17a2b8;
+        --light: #f8f9fa;
+        --dark: #2c3e50;
+        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+        --border-radius: 0.5rem;
+        --border-radius-lg: 1rem;
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        color: var(--dark);
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Professional Shop Owner Styling */
+      .main-content {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: calc(100vh - 76px);
+      }
+
+      /* Enhanced Shop Owner Navigation */
+      .shop-owner-navbar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        border: none;
+        padding: 1rem 0;
+        position: relative;
+        z-index: 1000;
+      }
+
+      .shop-owner-navbar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+        z-index: -1;
+      }
+
+      .shop-brand {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 1.4rem;
+        color: white !important;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .shop-brand:hover {
+        color: #f8f9fa !important;
+        transform: translateY(-2px);
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .shop-nav-link {
+        color: rgba(255, 255, 255, 0.95) !important;
+        font-weight: 600;
+        padding: 0.75rem 1.2rem !important;
+        border-radius: 0.75rem;
+        margin: 0 0.3rem;
+        transition: all 0.3s ease;
+        position: relative;
+        font-size: 0.95rem;
+        letter-spacing: 0.3px;
+      }
+
+      .shop-nav-link:hover {
+        color: white !important;
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .shop-nav-link.active {
+        background: rgba(255, 255, 255, 0.25);
+        color: white !important;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .shop-nav-link.active::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 3px;
+        background: white;
+        border-radius: 2px;
+      }
+
+      .shop-dropdown {
+        border: none;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        border-radius: 1rem;
+        padding: 0.75rem 0;
+        margin-top: 0.5rem;
+        background: white;
+        backdrop-filter: blur(10px);
+      }
+
+      .shop-dropdown-item {
+        padding: 0.875rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: #495057;
+        font-size: 0.95rem;
+      }
+
+      .shop-dropdown-item:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: translateX(8px);
+        border-radius: 0.5rem;
+        margin: 0 0.5rem;
+      }
+
+      .shop-dropdown-item i {
+        width: 20px;
+        text-align: center;
+      }
+
+      /* Mobile Navigation Enhancements */
+      @media (max-width: 991px) {
+        .shop-nav-link {
+          margin: 0.2rem 0;
+          padding: 0.75rem 1rem !important;
+          border-radius: 0.5rem;
+        }
+        
+        .shop-brand {
+          font-size: 1.2rem;
+        }
+        
+        .shop-dropdown {
+          margin-top: 0;
+          border-radius: 0.5rem;
+        }
+      }
+
+      /* Professional Cards */
+      .professional-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: none;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .professional-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border: none;
+        padding: 1.5rem;
+      }
+
+      .card-body {
+        padding: 2rem;
+      }
+
+      /* Professional Buttons */
+      .btn-professional {
+        border-radius: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+      }
+
+      .btn-professional:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Professional Forms */
+      .form-professional {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-control-professional {
+        border: 2px solid #e9ecef;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .form-control-professional:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+      }
+
+      /* Professional Tables */
+      .table-professional {
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .table-professional thead {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+      }
+
+      .table-professional th {
+        border: none;
+        font-weight: 600;
+        padding: 1rem;
+      }
+
+      .table-professional td {
+        border: none;
+        padding: 1rem;
+        vertical-align: middle;
+      }
+
+      .table-professional tbody tr {
+        transition: all 0.3s ease;
+      }
+
+      .table-professional tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.01);
+      }
+
+      /* Professional Stats Cards */
+      .stats-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: none;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .stats-card .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .stats-card .number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .stats-card .label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #6c757d;
+      }
+
+      /* Professional Page Headers */
+      .page-header {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .page-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .main-content {
+          padding: 1rem 0;
+        }
+        
+        .professional-card,
+        .form-professional,
+        .page-header {
+          margin: 0 1rem;
+          padding: 1.5rem;
+        }
+        
+        .page-title {
+          font-size: 1.5rem;
+        }
+        
+        .stats-card {
+          margin-bottom: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+<!-- Professional Shop Owner Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary shadow-sm shop-owner-navbar">
+  <div class="container">
+        <a class="navbar-brand shop-brand" href="{% url 'admin_dashboard' %}">
+      <i class="fas fa-store mr-2"></i>
+      Kerala Ration Shop Owner
+    </a>
+    
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#shopOwnerNavbar" aria-controls="shopOwnerNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="shopOwnerNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+              <a class="nav-link shop-nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}" href="{% url 'admin_dashboard' %}">
+            <i class="fas fa-tachometer-alt mr-1"></i>
+            Dashboard
+          </a>
+        </li>
+        {% if request.user.is_staff and not request.user.is_superuser %}
+        <li class="nav-item">
+              <a class="nav-link shop-nav-link {% if request.resolver_match.url_name == 'add_category' %}active{% endif %}" href="{% url 'add_category' %}">
+            <i class="fas fa-tags mr-1"></i>
+            Add Category
+          </a>
+        </li>
+        <li class="nav-item">
+              <a class="nav-link shop-nav-link {% if request.resolver_match.url_name == 'add_product' %}active{% endif %}" href="{% url 'add_product' %}">
+            <i class="fas fa-plus-circle mr-1"></i>
+            Add Ration Item
+          </a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+              <a class="nav-link shop-nav-link {% if request.resolver_match.url_name == 'view_products' %}active{% endif %}" href="{% url 'view_products' %}">
+            <i class="fas fa-shopping-basket mr-1"></i>
+            View Ration Items
+          </a>
+        </li>
+        <li class="nav-item">
+              <a class="nav-link shop-nav-link {% if request.resolver_match.url_name == 'view_users' %}active{% endif %}" href="{% url 'view_users' %}">
+            <i class="fas fa-users mr-1"></i>
+            View Customers
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          {% with unread=unread_notifications_count %}
+          <a class="nav-link dropdown-toggle shop-nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-bell mr-1"></i>
+            Notifications{% if unread %} <span class="badge badge-warning">{{ unread }}</span>{% endif %}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shop-dropdown">
+            <a class="dropdown-item shop-dropdown-item" href="{% url 'notifications_list' %}">
+              <i class="fas fa-inbox mr-2"></i> View all
+            </a>
+            <a class="dropdown-item shop-dropdown-item" href="{% url 'notifications_mark_all_read' %}">
+              <i class="fas fa-check-double mr-2"></i> Mark all read
+            </a>
+          </div>
+          {% endwith %}
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle shop-nav-link" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user-circle mr-1"></i>
+            {{ request.user.get_full_name|default:request.user.username }}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shop-dropdown">
+            <a class="dropdown-item shop-dropdown-item" href="{% url 'user_profile' %}">
+              <i class="fas fa-user mr-2"></i> Profile
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item shop-dropdown-item" href="{% url 'logout' %}">
+              <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content Area -->
+<main class="main-content">
+  <div class="container-fluid py-4">
+    {% include 'messages.html' %}
+    {% block shop_owner_content %}
+    {% endblock %}
+  </div>
+</main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
+
+<style>
+/* Professional Shop Owner Styling */
+.main-content {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: calc(100vh - 76px);
+}
+
+/* Enhanced Shop Owner Navigation */
+.shop-owner-navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+  border: none;
+  padding: 1rem 0;
+  position: relative;
+  z-index: 1000;
+}
+
+.shop-owner-navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+  z-index: -1;
+}
+
+.shop-brand {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: white !important;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shop-brand:hover {
+  color: #f8f9fa !important;
+  transform: translateY(-2px);
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.shop-nav-link {
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-weight: 600;
+  padding: 0.75rem 1.2rem !important;
+  border-radius: 0.75rem;
+  margin: 0 0.3rem;
+  transition: all 0.3s ease;
+  position: relative;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+.shop-nav-link:hover {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shop-nav-link.active {
+  background: rgba(255, 255, 255, 0.25);
+  color: white !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.shop-nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+}
+
+.shop-dropdown {
+  border: none;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  padding: 0.75rem 0;
+  margin-top: 0.5rem;
+  background: white;
+  backdrop-filter: blur(10px);
+}
+
+.shop-dropdown-item {
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.shop-dropdown-item:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateX(8px);
+  border-radius: 0.5rem;
+  margin: 0 0.5rem;
+}
+
+.shop-dropdown-item i {
+  width: 20px;
+  text-align: center;
+}
+
+/* Mobile Navigation Enhancements */
+@media (max-width: 991px) {
+  .shop-nav-link {
+    margin: 0.2rem 0;
+    padding: 0.75rem 1rem !important;
+    border-radius: 0.5rem;
+  }
+  
+  .shop-brand {
+    font-size: 1.2rem;
+  }
+  
+  .shop-dropdown {
+    margin-top: 0;
+    border-radius: 0.5rem;
+  }
+}
+
+/* Professional Cards */
+.professional-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: none;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.professional-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  padding: 1.5rem;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+/* Professional Buttons */
+.btn-professional {
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-professional:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Professional Forms */
+.form-professional {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.form-control-professional {
+  border: 2px solid #e9ecef;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.form-control-professional:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* Professional Tables */
+.table-professional {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.table-professional thead {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.table-professional th {
+  border: none;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.table-professional td {
+  border: none;
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.table-professional tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table-professional tbody tr:hover {
+  background-color: #f8f9fa;
+  transform: scale(1.01);
+}
+
+/* Professional Stats Cards */
+.stats-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.stats-card .icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.stats-card .number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.stats-card .label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+/* Professional Page Headers */
+.page-header {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem 0;
+  }
+  
+  .professional-card,
+  .form-professional,
+  .page-header {
+    margin: 0 1rem;
+    padding: 1.5rem;
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+}
+</style>

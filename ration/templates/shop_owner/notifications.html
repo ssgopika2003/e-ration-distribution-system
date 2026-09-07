@@ -1,0 +1,33 @@
+{% extends 'shop_owner/owner_nav.html' %}
+
+{% block shop_owner_content %}
+<div class="container mt-0">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Notifications</h3>
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'notifications_mark_all_read' %}">Mark all read</a>
+  </div>
+  {% if notifications %}
+    <ul class="list-group">
+      {% for n in notifications %}
+        <li class="list-group-item d-flex justify-content-between align-items-start {% if not n.is_read %}list-group-item-warning{% endif %}">
+          <div>
+            <div class="font-weight-bold">{{ n.subject }}</div>
+            <div class="small text-muted">{{ n.created_at|date:"M d, Y H:i" }}</div>
+            <div class="mt-1">{{ n.message }}</div>
+            {% if n.link_url %}
+              <div class="mt-1">
+                <a class="btn btn-sm btn-outline-primary" href="{{ n.link_url }}" target="_blank" rel="noopener">View product</a>
+              </div>
+            {% endif %}
+          </div>
+          {% if not n.is_read %}
+            <span class="badge badge-warning">New</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="text-muted">You're all caught up. No notifications.</div>
+  {% endif %}
+</div>
+{% endblock %}

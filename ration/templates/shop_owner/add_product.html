@@ -1,0 +1,173 @@
+{% extends 'shop_owner/owner_nav.html' %}
+
+{% block shop_owner_content %}
+<!-- Professional Page Header -->
+<div class="page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">
+        <i class="fas fa-plus-circle mr-2"></i>
+        Add New Ration Item
+      </h1>
+      <p class="page-subtitle">Add a new ration item to your inventory</p>
+    </div>
+    <a href="{% url 'view_products' %}" class="btn btn-outline-secondary btn-professional">
+      <i class="fas fa-arrow-left mr-2"></i>
+      Back to Items
+    </a>
+  </div>
+</div>
+
+<!-- Professional Form -->
+<div class="professional-card">
+  <div class="card-header">
+    <h4 class="mb-0">
+      <i class="fas fa-shopping-basket mr-2"></i>
+      Ration Item Details
+    </h4>
+  </div>
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="id_prd_name" class="form-label font-weight-bold">
+              <i class="fas fa-shopping-basket mr-2 text-primary"></i>
+              Ration Item Name
+            </label>
+            {{ form.prd_name }}
+            {% if form.prd_name.errors %}
+              <small class="text-danger">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ form.prd_name.errors }}
+              </small>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="id_prd_price" class="form-label font-weight-bold">
+              <i class="fas fa-rupee-sign mr-2 text-primary"></i>
+              Price (₹)
+            </label>
+            {{ form.prd_price }}
+            {% if form.prd_price.errors %}
+              <small class="text-danger">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ form.prd_price.errors }}
+              </small>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="id_prd_des" class="form-label font-weight-bold">
+              <i class="fas fa-align-left mr-2 text-primary"></i>
+              Description
+            </label>
+            {{ form.prd_des }}
+            {% if form.prd_des.errors %}
+              <small class="text-danger">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ form.prd_des.errors }}
+              </small>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="id_category" class="form-label font-weight-bold">
+              <i class="fas fa-tags mr-2 text-primary"></i>
+              Category
+            </label>
+            {{ form.category }}
+            {% if form.category.errors %}
+              <small class="text-danger">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ form.category.errors }}
+              </small>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="id_quantity" class="form-label font-weight-bold">
+              <i class="fas fa-boxes mr-2 text-primary"></i>
+              Quantity Available
+            </label>
+            <div class="d-flex align-items-center">
+              {{ form.quantity }}
+              <span id="quantity-unit" class="ml-2 text-muted">units</span>
+            </div>
+            {% if form.quantity.errors %}
+              <small class="text-danger">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ form.quantity.errors }}
+              </small>
+            {% endif %}
+            <small class="form-text text-muted">
+              <i class="fas fa-info-circle mr-1"></i>
+              Enter the number of units available in stock
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="id_prd_image" class="form-label font-weight-bold">
+              <i class="fas fa-image mr-2 text-primary"></i>
+              Item Image
+            </label>
+            {{ form.prd_image }}
+            {% if form.prd_image.errors %}
+              <small class="text-danger">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ form.prd_image.errors }}
+              </small>
+            {% endif %}
+            <small class="form-text text-muted">
+              <i class="fas fa-info-circle mr-1"></i>
+              Upload an image of the ration item (JPG, PNG, GIF)
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary btn-professional btn-lg">
+          <i class="fas fa-save mr-2"></i>
+          Save Ration Item
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+  <script>
+    (function(){
+      // Map category display/name to unit
+      const units = {
+        'rice': 'kg',
+        'oil': 'litre',
+        'flour': 'number'
+      };
+      const categorySelect = document.getElementById('id_category');
+      const unitEl = document.getElementById('quantity-unit');
+      function setUnit(){
+        if(!categorySelect) return;
+        const selected = categorySelect.options[categorySelect.selectedIndex]?.text?.toLowerCase() || '';
+        for(const key in units){
+          if(selected.includes(key)){
+            unitEl.textContent = units[key];
+            return;
+          }
+        }
+        // fallback
+        unitEl.textContent = 'units';
+      }
+      if(categorySelect){
+        categorySelect.addEventListener('change', setUnit);
+        // set initial value on load
+        setUnit();
+      }
+    })();
+  </script>
+{% endblock %}

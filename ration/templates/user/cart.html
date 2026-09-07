@@ -1,0 +1,281 @@
+{% extends 'user/user_nav.html' %}
+{% load static %}
+
+{% block user_content %}
+  <style>
+    body {
+      background: linear-gradient(180deg, rgba(240,195,142,0.10) 0%, rgba(241,170,155,0.08) 40%, rgba(72,66,109,0.05) 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .cart-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .cart-header {
+      background: linear-gradient(135deg, #312C51 0%, #48426D 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 16px 16px 0 0;
+      text-align: center;
+    }
+    
+    .cart-item {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    
+    .cart-item:hover {
+      transform: translateY(-2px);
+    }
+    
+    .cart-item-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    
+    .cart-item-placeholder {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, #f7f5fb 0%, #e8e4f0 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+    }
+    
+    .quantity-input {
+      width: 64px;
+      text-align: center;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 8px;
+      background: #fff;
+    }
+
+    .qty-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      color: #fff;
+    }
+    .qty-btn.minus { background: #F17373; }
+    .qty-btn.plus { background: #35B76E; }
+    .qty-btn i { pointer-events: none; }
+    
+    .quantity-input:focus {
+      border-color: #667eea;
+      outline: none;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .btn-update {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-update:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-remove {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-remove:hover {
+      background: #c82333;
+      transform: translateY(-1px);
+    }
+    
+    .cart-summary {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      padding: 30px;
+      margin-top: 30px;
+    }
+    
+    .total-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    .btn-checkout {
+      background: linear-gradient(135deg, #312C51 0%, #48426D 100%);
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(49, 44, 81, 0.25);
+    }
+    
+    .btn-checkout:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(49, 44, 81, 0.35);
+      color: #fff;
+    }
+    
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    
+    .empty-cart-icon {
+      font-size: 5rem;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .cart-container {
+        padding: 20px 15px;
+      }
+      
+      .cart-item {
+        margin-bottom: 15px;
+      }
+      
+      .cart-item-image, .cart-item-placeholder {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .btn-group-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .btn-group-mobile .btn {
+        width: 100%;
+      }
+    }
+  </style>
+  </style>
+
+  <!-- Messages for this page only -->
+  {% include 'messages.html' %}
+
+  <div class="cart-container">
+    <div class="cart-header">
+      <h2 class="mb-0">
+        <i class="fas fa-shopping-cart mr-2"></i>
+        Your Cart
+        {% if count > 0 %}
+          <span class="badge badge-light ml-2">{{ count }} item{{ count|pluralize }}</span>
+        {% endif %}
+      </h2>
+    </div>
+
+    {% if cart_items %}
+      <div class="row">
+        <div class="col-lg-8">
+          {% for item in cart_items %}
+          <div class="cart-item">
+            <div class="row no-gutters align-items-center p-3">
+              <div class="col-md-2">
+                {% if item.product.prd_image %}
+                  <img src="{{ item.product.prd_image.url }}" alt="{{ item.product.prd_name }}" class="cart-item-image">
+                {% else %}
+                  <div class="cart-item-placeholder">
+                    <i class="fas fa-image fa-2x"></i>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="col-md-4">
+                <h5 class="mb-1">{{ item.product.prd_name }}</h5>
+                <p class="text-muted mb-1">{{ item.product.category.catgory_name }}</p>
+                <p class="text-success font-weight-bold mb-0">₹{{ item.product.prd_price }}</p>
+              </div>
+              <div class="col-md-3">
+                <div class="d-flex align-items-center">
+                  <a href="{% url 'cart_decrease' item.id %}" class="qty-btn minus mr-2" aria-label="Decrease quantity">
+                    <i class="fas fa-minus"></i>
+                  </a>
+                  <input type="number" value="{{ item.quantity }}" readonly class="quantity-input mr-2">
+                  <a href="{% url 'cart_increase' item.id %}" class="qty-btn plus" aria-label="Increase quantity">
+                    <i class="fas fa-plus"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <p class="font-weight-bold mb-0">₹{{ item.total_price }}</p>
+              </div>
+              <div class="col-md-1">
+                <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-remove btn-sm" onclick="return confirm('Remove this item from cart?')">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <div class="col-lg-4">
+          <div class="cart-summary">
+            <h4 class="mb-3">Order Summary</h4>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Items ({{ count }}):</span>
+              <span>₹{{ total_price }}</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-3">
+              <span class="total-price">Total:</span>
+              <span class="total-price">₹{{ total_price }}</span>
+            </div>
+            <a href="{% url 'checkout' %}" class="btn btn-checkout btn-block">
+              <i class="fas fa-credit-card mr-2"></i>
+              Proceed to Checkout
+            </a>
+            <a href="{% url 'user_dashboard' %}" class="btn btn-outline-primary btn-block mt-2">
+              <i class="fas fa-arrow-left mr-2"></i>
+              Continue Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty-cart">
+        <div class="empty-cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h3 class="text-muted mb-3">Your cart is empty</h3>
+        <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet.</p>
+        <a href="{% url 'user_dashboard' %}" class="btn btn-primary btn-lg">
+          <i class="fas fa-shopping-bag mr-2"></i>
+          Start Shopping
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+{% endblock %}

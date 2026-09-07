@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard - Delight Mobiles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  </head>
+    <body style="background:linear-gradient(180deg, #fbf6f5 0%, #fff9f8 35%, #fff 100%);">
+      <div class="admin-main-content" style="min-height:100vh;">
+  {% include 'admin/admin_nav.html' %}
+
+        <main class="admin-content">
+            <!-- Messages for this page only -->
+            {% include 'messages.html' %}
+            
+            <header class="admin-header text-center py-4">
+                <h1 style="color:#312C51;">{{ title }}</h1>
+                <p style="color:#48426D;">{{ subtitle }}</p>
+            </header>
+
+            <div class="container py-3 px-sm-3">
+              <div class="row">
+                <style>
+                  a.card-link { text-decoration: none; }
+                  a.card-link .card { transition: transform .12s ease, box-shadow .12s ease; }
+                  a.card-link:hover .card { transform: translateY(-6px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+                </style>
+
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <a href="{% url 'admin_view_products' %}" class="card-link">
+                    <div class="card shadow-sm border-0 card--product" style="border-radius:16px;background:linear-gradient(135deg,#312C51,#48426D);color:#fff;">
+                      <div class="card-body text-center">
+                        <div class="h6 mb-1">Products</div>
+                        <div class="display-4" style="font-weight:700;">{{ products_count }}</div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <a href="{% url 'admin_view_users' %}" class="card-link">
+                    <div class="card shadow-sm border-0 card--product" style="border-radius:16px;background:#F0C38E;color:#312C51;">
+                      <div class="card-body text-center">
+                        <div class="h6 mb-1">Customers</div>
+                        <div class="display-4" style="font-weight:700;">{{ customers_count }}</div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <a href="{% url 'admin_view_shop_owners' %}" class="card-link">
+                    <div class="card shadow-sm border-0 card--product" style="border-radius:16px;background:#F1AA9B;color:#312C51;">
+                      <div class="card-body text-center">
+                        <div class="h6 mb-1">Shop Owners</div>
+                        <div class="display-4" style="font-weight:700;">{{ shop_owners_count }}</div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <a href="{% url 'admin_view_products' %}" class="card-link">
+                    <div class="card shadow-sm border-0 card--product" style="border-radius:16px;background:#C1E1C1;color:#0A3D2B;">
+                      <div class="card-body text-center">
+                        <div class="h6 mb-1">Carts</div>
+                        <div class="display-4" style="font-weight:700;">{{ carts_count }}</div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            </main>
+      </div>
+    </body>
+</html>

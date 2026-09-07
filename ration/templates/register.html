@@ -1,0 +1,772 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up - Kerala Ration Shop{% endblock %}
+{% block content %}
+<!-- Messages -->
+{% include 'messages.html' %}
+
+<!-- Registration Section -->
+<section class="register-section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+        <div class="card register-card border-0 shadow-custom">
+          <div class="card-header bg-gradient-primary text-center py-4">
+            <h3 class="text-white font-weight-bold mb-2">
+              <i class="fas fa-user-plus mr-2"></i>
+              Create Customer Account
+            </h3>
+            <p class="text-white-50 mb-0">Join Kerala Ration Shop and start shopping for essentials</p>
+    </div>
+          <div class="card-body p-5">
+            <form method="post" enctype="multipart/form-data" id="registrationForm" class="register-form" novalidate>
+        {% csrf_token %}
+              
+        {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                  <i class="fas fa-exclamation-triangle mr-2"></i>
+                  {{ form.non_field_errors }}
+                </div>
+        {% endif %}
+
+              <!-- Personal Information -->
+              <div class="form-section mb-5">
+                <h5 class="section-title">
+                  <i class="fas fa-user mr-2 text-primary"></i>
+                  Personal Information
+                </h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="id_first_name" class="form-label font-weight-bold">
+                        First Name
+                      </label>
+            {{ form.first_name }}
+                      {% if form.first_name.errors %}
+                        <small class="text-danger">
+                          <i class="fas fa-exclamation-circle mr-1"></i>
+                          {{ form.first_name.errors }}
+                        </small>
+                      {% endif %}
+                    </div>
+          </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="id_last_name" class="form-label font-weight-bold">
+                        Last Name
+                      </label>
+            {{ form.last_name }}
+                      {% if form.last_name.errors %}
+                        <small class="text-danger">
+                          <i class="fas fa-exclamation-circle mr-1"></i>
+                          {{ form.last_name.errors }}
+                        </small>
+                      {% endif %}
+                    </div>
+                  </div>
+          </div>
+        </div>
+
+              <!-- Account Information -->
+              <div class="form-section mb-5">
+                <h5 class="section-title">
+                  <i class="fas fa-key mr-2 text-primary"></i>
+                  Account Information
+                </h5>
+                <div class="form-group">
+                  <label for="id_username" class="form-label font-weight-bold">
+                    <i class="fas fa-user mr-2 text-primary"></i>
+                    Username
+                  </label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-light border-right-0">
+                        <i class="fas fa-user text-muted"></i>
+                      </span>
+                </div>
+          {{ form.username }}
+                  </div>
+          <div class="invalid-feedback" id="username-error"></div>
+                  {% if form.username.errors %}
+                    <small class="text-danger">
+                      <i class="fas fa-exclamation-circle mr-1"></i>
+                      {{ form.username.errors }}
+                    </small>
+                  {% endif %}
+                  <small class="form-text text-muted">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Username must be 3-150 characters, letters only (no numbers or special characters)
+                  </small>
+                </div>
+
+                <div class="form-group">
+                  <label for="id_email" class="form-label font-weight-bold">
+                    <i class="fas fa-envelope mr-2 text-primary"></i>
+                    Email Address
+                  </label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-light border-right-0">
+                        <i class="fas fa-envelope text-muted"></i>
+                      </span>
+        </div>
+                    {{ form.email }}
+                  </div>
+                    <div class="invalid-feedback" id="email-error"></div>
+                  {% if form.email.errors %}
+                    <small class="text-danger">
+                      <i class="fas fa-exclamation-circle mr-1"></i>
+                      {{ form.email.errors }}
+                    </small>
+                  {% endif %}
+                  <small class="form-text text-muted">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Enter a valid email address
+                  </small>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="id_password1" class="form-label font-weight-bold">
+                        <i class="fas fa-lock mr-2 text-primary"></i>
+                        Password
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text bg-light border-right-0">
+                            <i class="fas fa-lock text-muted"></i>
+                          </span>
+                        </div>
+                        {{ form.password1 }}
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary border-left-0" type="button" id="togglePassword1">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        </div>
+                      </div>
+                      {% if form.password1.errors %}
+                        <small class="text-danger">
+                          <i class="fas fa-exclamation-circle mr-1"></i>
+                          {{ form.password1.errors }}
+                        </small>
+                      {% endif %}
+                      <small class="form-text text-muted">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Password must be 3-6 digits only
+                      </small>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="id_password2" class="form-label font-weight-bold">
+                        <i class="fas fa-lock mr-2 text-primary"></i>
+                        Confirm Password
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text bg-light border-right-0">
+                            <i class="fas fa-lock text-muted"></i>
+                          </span>
+                        </div>
+                        {{ form.password2 }}
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary border-left-0" type="button" id="togglePassword2">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        </div>
+                      </div>
+                      {% if form.password2.errors %}
+                        <small class="text-danger">
+                          <i class="fas fa-exclamation-circle mr-1"></i>
+                          {{ form.password2.errors }}
+                        </small>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contact Information -->
+              <div class="form-section mb-5">
+                <h5 class="section-title">
+                  <i class="fas fa-phone mr-2 text-primary"></i>
+                  Contact Information
+                </h5>
+                <div class="form-group">
+                  <label for="id_contact_no" class="form-label font-weight-bold">
+                    <i class="fas fa-phone mr-2 text-primary"></i>
+                    Contact Number
+                  </label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-light border-right-0">
+                        <i class="fas fa-phone text-muted"></i>
+                      </span>
+                </div>
+                    {{ form.contact_no }}
+                  </div>
+                    <div class="invalid-feedback" id="contact-error"></div>
+                  {% if form.contact_no.errors %}
+                    <small class="text-danger">
+                      <i class="fas fa-exclamation-circle mr-1"></i>
+                      {{ form.contact_no.errors }}
+                    </small>
+                  {% endif %}
+                  <small class="form-text text-muted">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Contact number must be 10-15 digits
+                  </small>
+                </div>
+
+                <div class="form-group">
+                  <label for="id_address" class="form-label font-weight-bold">
+                    <i class="fas fa-map-marker-alt mr-2 text-primary"></i>
+                    Address
+                  </label>
+                    {{ form.address }}
+                  {% if form.address.errors %}
+                    <small class="text-danger">
+                      <i class="fas fa-exclamation-circle mr-1"></i>
+                      {{ form.address.errors }}
+                    </small>
+                  {% endif %}
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="id_place" class="form-label font-weight-bold">
+                        <i class="fas fa-city mr-2 text-primary"></i>
+                        Place/City
+                      </label>
+                    {{ form.place }}
+                      {% if form.place.errors %}
+                        <small class="text-danger">
+                          <i class="fas fa-exclamation-circle mr-1"></i>
+                          {{ form.place.errors }}
+                        </small>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="id_ration_card_number" class="form-label font-weight-bold">
+                        <i class="fas fa-id-card mr-2 text-primary"></i>
+                        Ration Card Number
+                      </label>
+                      {{ form.ration_card_number }}
+                      {% if form.ration_card_number.errors %}
+                        <small class="text-danger">
+                          <i class="fas fa-exclamation-circle mr-1"></i>
+                          {{ form.ration_card_number.errors }}
+                        </small>
+                      {% endif %}
+                      <small class="form-text text-muted">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Required: 11-digit ration card number for verification
+                      </small>
+                </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="id_card_type" class="form-label font-weight-bold">
+                <i class="fas fa-palette mr-2 text-primary"></i>
+                Card Type
+              </label>
+              {{ form.card_type }}
+              {% if form.card_type.errors %}
+                <small class="text-danger">{{ form.card_type.errors }}</small>
+              {% endif %}
+              <small class="form-text text-muted">Select the ration card category (APL/BPL/AAY/PHH) — this helps shop owners filter customers.</small>
+            </div>
+          </div>
+          </div>
+        </div>
+
+              <!-- Additional Ration Card Data -->
+              <div class="form-section mb-5">
+                <h5 class="section-title">
+                  <i class="fas fa-id-card-alt mr-2 text-primary"></i>
+                  Ration Card Images & Family
+                </h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="id_family_members" class="form-label font-weight-bold">Family Members</label>
+                      {{ form.family_members }}
+                      {% if form.family_members.errors %}
+                        <small class="text-danger">{{ form.family_members.errors }}</small>
+                      {% endif %}
+                      <small class="form-text text-muted">Total adults and children on the ration card</small>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="id_ration_card_front" class="form-label font-weight-bold">Ration Card Front</label>
+                      {{ form.ration_card_front }}
+                      {% if form.ration_card_front.errors %}
+                        <small class="text-danger">{{ form.ration_card_front.errors }}</small>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="id_ration_card_back" class="form-label font-weight-bold">Ration Card Back</label>
+                      {{ form.ration_card_back }}
+                      {% if form.ration_card_back.errors %}
+                        <small class="text-danger">{{ form.ration_card_back.errors }}</small>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Family Members Details (dynamic) -->
+              <div class="form-section mb-5" id="familyMembersSection" style="display:none;">
+                <h5 class="section-title">
+                  <i class="fas fa-users mr-2 text-primary"></i>
+                  Family Members Details
+                </h5>
+                <div id="familyMembersContainer"></div>
+                <small class="form-text text-muted">Provide name, gender and date of birth for each family member.</small>
+              </div>
+
+              <!-- Profile Image -->
+              <div class="form-section mb-5">
+                <h5 class="section-title">
+                  <i class="fas fa-camera mr-2 text-primary"></i>
+                  Profile Image
+                </h5>
+                <div class="form-group">
+                  <label for="id_image" class="form-label font-weight-bold">
+                    <i class="fas fa-image mr-2 text-primary"></i>
+                    Profile Picture
+                  </label>
+                  <div class="custom-file">
+          {{ form.image }}
+                    <label class="custom-file-label" for="id_image">Choose profile image...</label>
+                  </div>
+                  {% if form.image.errors %}
+                    <small class="text-danger">
+                      <i class="fas fa-exclamation-circle mr-1"></i>
+                      {{ form.image.errors }}
+                    </small>
+                  {% endif %}
+                  <small class="form-text text-muted">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Optional: Upload a profile picture (JPG, PNG, GIF)
+                  </small>
+                </div>
+              </div>
+
+              <!-- Terms and Conditions -->
+              <div class="form-group form-check mb-4">
+                <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                <label class="form-check-label text-muted" for="termsCheck">
+                  I agree to the <a href="#" class="text-primary">Terms and Conditions</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                </label>
+        </div>
+
+              <button type="submit" class="btn btn-primary btn-lg btn-block mb-4" id="submitBtn">
+                <i class="fas fa-user-plus mr-2"></i>
+                Create Account
+              </button>
+      </form>
+
+            <div class="text-center">
+              <p class="text-muted mb-3">Already have an account?</p>
+              <a href="{% url 'login' %}" class="btn btn-outline-primary">
+                <i class="fas fa-sign-in-alt mr-2"></i>
+                Sign In
+              </a>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<style>
+.register-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.register-card {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.form-section {
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 2rem;
+}
+
+.form-section:last-child {
+  border-bottom: none;
+}
+
+.section-title {
+  color: var(--dark);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary);
+  display: inline-block;
+}
+
+.form-label {
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-control {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.input-group-text {
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-right: none;
+}
+
+.input-group .form-control {
+  border-left: none;
+}
+
+.input-group .form-control:focus {
+  border-left: none;
+}
+
+.custom-file-label {
+  border: 2px solid #e9ecef;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+.custom-file-input:focus ~ .custom-file-label {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #dc3545;
+}
+
+.form-text {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+}
+
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (max-width: 768px) {
+  .register-section {
+    padding: 1rem 0;
+  }
+  
+  .register-card .card-body {
+    padding: 2rem;
+  }
+  
+  .form-section {
+    padding-bottom: 1.5rem;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registrationForm');
+    const usernameField = document.getElementById('id_username');
+    const emailField = document.getElementById('id_email');
+    const contactField = document.getElementById('id_contact_no');
+    const rationField = document.getElementById('id_ration_card_number');
+    const placeField = document.getElementById('id_place');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Password toggle functionality
+    const togglePassword1 = document.getElementById('togglePassword1');
+    const togglePassword2 = document.getElementById('togglePassword2');
+    const password1Field = document.getElementById('id_password1');
+    const password2Field = document.getElementById('id_password2');
+    
+    if (togglePassword1 && password1Field) {
+        togglePassword1.addEventListener('click', function() {
+            const type = password1Field.getAttribute('type') === 'password' ? 'text' : 'password';
+            password1Field.setAttribute('type', type);
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    }
+    
+    if (togglePassword2 && password2Field) {
+        togglePassword2.addEventListener('click', function() {
+            const type = password2Field.getAttribute('type') === 'password' ? 'text' : 'password';
+            password2Field.setAttribute('type', type);
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    }
+
+    // Dynamic family members inputs
+    const familyField = document.getElementById('id_family_members');
+    const familySection = document.getElementById('familyMembersSection');
+    const familyContainer = document.getElementById('familyMembersContainer');
+
+    function renderFamilyInputs(count) {
+        familyContainer.innerHTML = '';
+        if (!count || count <= 0) {
+            familySection.style.display = 'none';
+            return;
+        }
+        familySection.style.display = 'block';
+        for (let i = 0; i < count; i++) {
+            const idx = i+1;
+            const div = document.createElement('div');
+            div.className = 'member-row mb-3 p-3 border rounded';
+            div.innerHTML = `
+                <h6 class="mb-3">Member ${idx}</h6>
+                <div class="form-row">
+                  <div class="form-group col-md-5">
+                    <label>Name</label>
+                    <input type="text" name="member_name_${i}" class="form-control" placeholder="Full name" />
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Gender</label>
+                    <select name="member_gender_${i}" class="form-control">
+                      <option value="">Select</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Date of Birth</label>
+                    <input type="date" name="member_dob_${i}" class="form-control" />
+                  </div>
+                </div>
+            `;
+            familyContainer.appendChild(div);
+        }
+    }
+
+    if (familyField) {
+        familyField.addEventListener('input', function() {
+            const val = parseInt(this.value) || 0;
+            renderFamilyInputs(val);
+        });
+        // initialize if already has a value
+        const initial = parseInt(familyField.value) || 0;
+        if (initial > 0) renderFamilyInputs(initial);
+    }
+    
+    // Real-time validation functions
+    function validateUsername(username) {
+        const usernameRegex = /^[a-zA-Z]+$/;
+        if (!username) {
+            return 'Username is required.';
+        }
+        if (username.length < 3) {
+            return 'Username must be at least 3 characters long.';
+        }
+        if (username.length > 150) {
+            return 'Username must be less than 150 characters.';
+        }
+        if (!usernameRegex.test(username)) {
+            return 'Username must contain only letters (no numbers or special characters).';
+        }
+        return '';
+    }
+    
+    function validateEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!email) {
+            return 'Email is required.';
+        }
+        if (!emailRegex.test(email)) {
+            return 'Please enter a valid email address.';
+        }
+        return '';
+    }
+    
+    function validateContact(contact) {
+        const cleanContact = contact.replace(/[^\d]/g, '');
+        if (!contact) {
+            return 'Contact number is required.';
+        }
+        if (cleanContact.length < 10 || cleanContact.length > 15) {
+            return 'Contact number must be between 10 and 15 digits.';
+        }
+        if (!/^\d+$/.test(cleanContact)) {
+            return 'Contact number must contain only digits.';
+        }
+        return '';
+    }
+
+    function validateRation(rc) {
+        if (!rc) return '';
+        const norm = rc.replace(/\s+/g, '');
+        if (!/^[A-Za-z0-9]+$/.test(norm)) return 'Ration card must be alphanumeric.';
+        if (norm.length < 8) return 'Ration card number looks too short.';
+        return '';
+    }
+    
+    function showError(field, errorElement, message) {
+        field.classList.add('is-invalid');
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+    
+    function clearError(field, errorElement) {
+        field.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        errorElement.style.display = 'none';
+    }
+    
+    // Username validation
+    if (usernameField) {
+    usernameField.addEventListener('blur', function() {
+        const error = validateUsername(this.value);
+        const errorElement = document.getElementById('username-error');
+        if (error) {
+            showError(this, errorElement, error);
+        } else {
+            clearError(this, errorElement);
+        }
+    });
+    }
+    
+    // Email validation
+    if (emailField) {
+    emailField.addEventListener('blur', function() {
+        const error = validateEmail(this.value);
+        const errorElement = document.getElementById('email-error');
+        if (error) {
+            showError(this, errorElement, error);
+        } else {
+            clearError(this, errorElement);
+        }
+    });
+    }
+    
+    // Contact number validation
+    if (contactField) {
+    contactField.addEventListener('blur', function() {
+        const error = validateContact(this.value);
+        const errorElement = document.getElementById('contact-error');
+        if (error) {
+            showError(this, errorElement, error);
+        } else {
+            clearError(this, errorElement);
+        }
+    });
+        
+        // Real-time contact number formatting
+        contactField.addEventListener('input', function() {
+            this.value = this.value.replace(/[^\d]/g, '');
+        });
+    }
+
+    // Ration card validation
+    if (rationField) {
+      rationField.addEventListener('blur', function() {
+          const error = validateRation(this.value);
+          const errorElement = document.getElementById('ration_card_number-error') || document.createElement('div');
+          if (error) {
+              showError(this, errorElement, error);
+          } else {
+              clearError(this, errorElement);
+          }
+      });
+    }
+    
+    // Form submission validation
+    if (form) {
+    form.addEventListener('submit', function(e) {
+        let hasErrors = false;
+        
+        // Validate username
+            if (usernameField) {
+        const usernameError = validateUsername(usernameField.value);
+        if (usernameError) {
+            showError(usernameField, document.getElementById('username-error'), usernameError);
+            hasErrors = true;
+                }
+        }
+        
+        // Validate email
+            if (emailField) {
+        const emailError = validateEmail(emailField.value);
+        if (emailError) {
+            showError(emailField, document.getElementById('email-error'), emailError);
+            hasErrors = true;
+                }
+        }
+        
+        // Validate contact
+            if (contactField) {
+        const contactError = validateContact(contactField.value);
+        if (contactError) {
+            showError(contactField, document.getElementById('contact-error'), contactError);
+            hasErrors = true;
+                }
+        }
+        
+        if (hasErrors) {
+            e.preventDefault();
+                if (submitBtn) submitBtn.disabled = false;
+        } else {
+                if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm mr-2"></span>Creating Account...';
+                }
+        }
+    });
+    }
+    
+    // Clear errors on input
+    [usernameField, emailField, contactField, rationField, placeField].forEach(field => {
+        if (!field) return;
+        field.addEventListener('input', function() {
+            const errorElement = document.getElementById(this.id.replace('id_', '') + '-error');
+            if (this.classList.contains('is-invalid')) {
+                clearError(this, errorElement);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

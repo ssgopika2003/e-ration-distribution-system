@@ -1,0 +1,106 @@
+{% extends 'shop_owner/owner_nav.html' %}
+
+{% block shop_owner_content %}
+<!-- Professional Page Header -->
+<div class="page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">
+        <i class="fas fa-users mr-2"></i>
+        Customer Management
+      </h1>
+      <p class="page-subtitle">Manage your ration shop customers</p>
+    </div>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary btn-professional">
+      <i class="fas fa-tachometer-alt mr-2"></i>
+      Dashboard
+    </a>
+  </div>
+</div>
+
+<!-- Customers Grid -->
+<div class="row mb-3">
+  <div class="col-12">
+    <form method="get" class="form-inline">
+      <label for="card_type" class="mr-2 font-weight-bold">Filter by Card Type:</label>
+      <select name="card_type" id="card_type" class="form-control mr-2">
+        <option value="">All</option>
+        {% for ct in card_types %}
+          <option value="{{ ct.id }}" {% if selected_card_type and selected_card_type|stringformat:'s' == ct.id|stringformat:'s' %}selected{% endif %}>{{ ct.name }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-outline-primary" type="submit">Filter</button>
+    </form>
+  </div>
+</div>
+<div class="row">
+  {% for u in users %}
+  <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+    <div class="professional-card h-100">
+      <div class="card-body text-center">
+        {% if u.image %}
+          <img class="rounded-circle mb-3" src="{{ u.image.url }}" alt="{{ u.user.username }}" style="width: 80px; height: 80px; object-fit: cover;" />
+        {% else %}
+          <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 80px; height: 80px;">
+            <i class="fas fa-user fa-2x text-muted"></i>
+          </div>
+        {% endif %}
+        
+        <h5 class="card-title font-weight-bold mb-2">{{ u.user.get_full_name|default:u.user.username }}</h5>
+        
+        <div class="text-muted small mb-3">
+          <div class="mb-1">
+            <i class="fas fa-envelope mr-1"></i>
+            {{ u.user.email }}
+          </div>
+          {% if u.place %}
+          <div class="mb-1">
+            <i class="fas fa-map-marker-alt mr-1"></i>
+            {{ u.place }}
+          </div>
+          {% endif %}
+          {% if u.contact_no %}
+          <div class="mb-1">
+            <i class="fas fa-phone mr-1"></i>
+            {{ u.contact_no }}
+          </div>
+          {% endif %}
+          {% if u.ration_card_number %}
+          <div class="mb-1">
+            <i class="fas fa-id-card mr-1"></i>
+            Card: {{ u.ration_card_number }}
+          </div>
+          {% endif %}
+        </div>
+        
+        <div class="d-flex gap-2">
+          <a href="{% url 'user_detail' u.user.id %}" class="btn btn-outline-primary btn-sm flex-fill">
+            <i class="fas fa-eye mr-1"></i>
+            View
+          </a>
+          <form method="post" action="{% url 'delete_user' u.user.id %}" style="display:inline;" class="flex-fill">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm w-100" onclick="return confirm('Are you sure you want to delete this customer?')">
+              <i class="fas fa-trash mr-1"></i>
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <div class="professional-card text-center py-5">
+      <i class="fas fa-users fa-4x text-muted mb-4"></i>
+      <h3 class="text-muted mb-3">No Customers Found</h3>
+      <p class="text-muted mb-4">Customers will appear here once they register for your ration shop.</p>
+      <a href="{% url 'admin_dashboard' %}" class="btn btn-primary btn-professional">
+        <i class="fas fa-tachometer-alt mr-2"></i>
+        Go to Dashboard
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

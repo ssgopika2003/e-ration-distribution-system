@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Site Admin - Delight Mobiles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  </head>
+  <body style="background:linear-gradient(180deg, #fbf6f5 0%, #fff9f8 35%, #fff 100%);">
+    <div class="admin-main-content" style="min-height:100vh;">
+    {% include 'admin/admin_nav.html' %}
+
+      <main class="py-4">
+      <div class="admin-content">
+        {% include 'messages.html' %}
+
+        <div class="admin-header">
+          <h1>Site Administration</h1>
+          <p>Overview and quick actions for site admins</p>
+        </div>
+
+        <!-- Summary cards -->
+        <div class="row mb-4">
+          <div class="col-sm-3">
+            <div class="card shadow-sm border-0" style="border-radius:12px;">
+              <div class="card-body text-center">
+                <div class="h6">Products</div>
+                <div class="display-4" style="font-weight:700;">{{ products_count }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="card shadow-sm border-0" style="border-radius:12px;background:#F0C38E;color:#312C51;">
+              <div class="card-body text-center">
+                <div class="h6">Customers</div>
+                <div class="display-4" style="font-weight:700;">{{ customers_count }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="card shadow-sm border-0" style="border-radius:12px;background:#F1AA9B;color:#312C51;">
+              <div class="card-body text-center">
+                <div class="h6">Shop Owners</div>
+                <div class="display-4" style="font-weight:700;">{{ shop_owners_count }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="card shadow-sm border-0" style="border-radius:12px;background:#C1E1C1;color:#0A3D2B;">
+              <div class="card-body text-center">
+                <div class="h6">Carts</div>
+                <div class="display-4" style="font-weight:700;">{{ carts_count }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin actions -->
+        <div class="mb-4">
+          <a href="{% url 'admin_send_stock_alerts' %}" class="btn btn-warning">
+            <i class="fas fa-bell mr-1"></i> Send Low-Stock Alerts (Rice < 50kg, Oil < 20L, Flour < 25kg)
+          </a>
+        </div>
+
+        <!-- Shop Owners and Users sections removed to keep dashboard focused on summary and products -->
+
+        <section>
+          <h3>Products</h3>
+          <div class="admin-cards">
+            <div class="row">
+              {% for prod in products %}
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                  <div class="card card--product">
+                    <div class="prd-image">
+                      {% if prod.prd_image %}
+                        <img src="{{ prod.prd_image.url }}" alt="{{ prod.prd_name }}" style="max-height:120px;object-fit:contain;" />
+                      {% else %}
+                        <img src="/static/images/phone1.svg" alt="placeholder" style="height:100px;" />
+                      {% endif %}
+                    </div>
+                    <div class="card-body">
+                      <strong>{{ prod.prd_name }}</strong>
+                      <div class="small text-muted">Category: {{ prod.category.catgory_name }}</div>
+                      <div class="mt-2">
+                        <a href="{% url 'product_detail' prod.id %}" class="btn btn-outline-primary custom">View</a>
+                        <a href="{% url 'edit_product' prod.id %}" class="btn btn-outline-secondary custom">Edit</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% empty %}
+                <div class="col-12 text-muted">No products found.</div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+
+      </div>
+      </main>
+    </div>
+  </body>
+</html>

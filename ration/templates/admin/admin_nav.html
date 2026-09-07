@@ -1,0 +1,70 @@
+<!-- Admin top navigation (no sidebar) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+  :root{
+    --header-height:56px;
+    --brand-color:#312C51;
+    --accent:#F0C38E;
+    --muted:#6b6b6b;
+  }
+
+  body { margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+  a { color:inherit; text-decoration:none }
+
+  .admin-navbar { position:fixed; top:0; left:0; right:0; height:var(--header-height); background:linear-gradient(180deg,var(--brand-color), #48426D); color:#fff; display:flex; align-items:center; z-index:1100; box-shadow: 0 3px 8px rgba(16,12,40,0.10) }
+  .admin-navbar .container { display:flex; align-items:center; justify-content:space-between; width:100%; max-width:1200px; margin:0 auto; padding:0 14px }
+  .admin-navbar .brand { font-weight:700; letter-spacing:0.2px; display:flex; align-items:center; gap:10px }
+  .admin-navbar .brand small { opacity:0.85; font-weight:600 }
+  .admin-navbar .nav { display:flex; gap:10px; align-items:center }
+  .admin-navbar .nav a { padding:8px 12px; border-radius:10px; color:#fff; font-weight:600 }
+  .admin-navbar .nav a:hover { background:rgba(255,255,255,0.08) }
+  .admin-navbar .nav a.active { background:rgba(255,255,255,0.16) }
+  .admin-navbar .actions { display:flex; gap:10px; align-items:center }
+  .chip { padding:4px 10px; border-radius:999px; background:rgba(255,255,255,0.14); font-size:12px; font-weight:700 }
+  .btn-ghost { background:transparent; border:1px solid rgba(255,255,255,0.25); color:#fff; padding:8px 12px; border-radius:8px }
+
+  /* page content offset */
+  .admin-main,
+  .admin-main-content,
+  .admin-content { margin-top: calc(var(--header-height) + 8px); }
+
+  /* responsive */
+  @media (max-width: 900px){
+    .admin-navbar .nav { display:none }
+    .admin-navbar .nav.open { display:flex; position:absolute; top:var(--header-height); left:0; right:0; background:#2b2751; padding:10px; box-shadow:0 10px 20px rgba(0,0,0,0.15) }
+    .admin-navbar .toggle { display:inline-flex }
+  }
+  @media (min-width: 901px){ .admin-navbar .toggle { display:none } }
+</style>
+
+<header class="admin-navbar">
+  <div class="container">
+    <div class="brand">
+      <button class="toggle btn-ghost" onclick="document.querySelector('.admin-navbar .nav').classList.toggle('open')" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+      <span>Delight Mobiles</span>
+      <small>Admin</small>
+      {% if request.user.is_superuser %}
+        <span class="chip" title="Superuser">SUPERUSER</span>
+      {% else %}
+        <span class="chip" title="Shop Owner">OWNER</span>
+      {% endif %}
+    </div>
+
+    <nav class="nav">
+      {% if request.user.is_superuser %}
+        <a href="{% url 'site_admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'site_admin_dashboard' %}active{% endif %}"><i class="fas fa-home mr-1"></i> Dashboard</a>
+      {% else %}
+        <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}"><i class="fas fa-home mr-1"></i> Dashboard</a>
+      {% endif %}
+      <a href="{% url 'admin_view_products' %}" class="{% if request.resolver_match.url_name == 'admin_view_products' %}active{% endif %}"><i class="fas fa-box-open mr-1"></i> Products</a>
+      <a href="{% url 'admin_view_users' %}" class="{% if request.resolver_match.url_name == 'admin_view_users' %}active{% endif %}"><i class="fas fa-users mr-1"></i> Users</a>
+      <a href="{% url 'admin_view_shop_owners' %}" class="{% if request.resolver_match.url_name == 'admin_view_shop_owners' %}active{% endif %}"><i class="fas fa-store mr-1"></i> Shop Owners</a>
+    </nav>
+
+    <div class="actions">
+      <a href="{% url 'logout' %}" class="btn-ghost"><i class="fas fa-sign-out-alt mr-1"></i> Logout</a>
+    </div>
+  </div>
+</header>

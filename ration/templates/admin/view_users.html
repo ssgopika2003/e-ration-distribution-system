@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Users List - Delight Mobiles</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .user-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .user-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+    .user-card .user-image {
+      transition: transform 0.3s ease;
+    }
+    .user-card:hover .user-image {
+      transform: scale(1.1);
+    }
+    .user-card a {
+      transition: color 0.3s ease;
+    }
+    .user-card:hover a {
+      color: #F1AA9B !important;
+    }
+    .user-card .btn {
+      transition: all 0.3s ease;
+    }
+    .user-card:hover .btn-outline-danger {
+      background-color: #F1AA9B;
+      border-color: #F1AA9B;
+      color: white;
+    }
+    .card-type-badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
+    .ct-white { background:#fff; color:#333; border:1px solid #ddd; }
+    .ct-pink { background:#ffc0cb; color:#7a0045; }
+    .ct-yellow { background:#ffe08a; color:#5a4b00; }
+    .ct-cream { background:#fffdd0; color:#5a4b00; }
+    .ct-gray { background:#f1f3f5; color:#495057; }
+  </style>
+</head>
+<body style="background:linear-gradient(180deg, rgba(240,195,142,0.10) 0%, rgba(241,170,155,0.08) 40%, rgba(72,66,109,0.05) 100%);">
+  <div class="admin-main-content" style="min-height:100vh;">
+  {% include 'admin/admin_nav.html' %}
+
+    <main class="py-4">
+    <div class="admin-content">
+      <div class="admin-header text-center">
+        <h1>Users List</h1>
+        <p>All registered users on the platform</p>
+      </div>
+      <div class="admin-cards">
+      <div class="row">
+        {% for u in users %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+          <div class="card h-100 border-0 shadow-sm user-card" style="border-radius:14px;overflow:hidden;">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                {% if u.image %}
+                  <img src="{{ u.image.url }}" class="user-image rounded-circle" style="width:80px;height:80px;object-fit:cover;">
+                {% else %}
+                  <div class="user-image rounded-circle mx-auto d-flex align-items-center justify-content-center" style="width:80px;height:80px;background:#f7f5fb;color:#888;">
+                    <i class="fas fa-user" style="font-size:24px;"></i>
+                  </div>
+                {% endif %}
+              </div>
+              <h6 class="mb-1">
+                <a href="{% url 'admin_user_detail' u.user.id %}" style="color:#312C51;text-decoration:none;">{{ u.user.username }}</a>
+              </h6>
+              <div class="text-muted small mb-1">{{ u.user.email }}</div>
+              {% if u.card_type %}
+                {% with ct=u.card_type.code|lower %}
+                  <div class="mb-1">
+                    <span class="card-type-badge ct-{% if ct in 'apl bpl aay phh' %}{{ ct|default:'gray' }}{% else %}gray{% endif %}">{{ u.card_type.name }}</span>
+                  </div>
+                {% endwith %}
+              {% endif %}
+              {% if u.address %}
+                <div class="text-muted small mb-1">{{ u.address|truncatechars:20 }}</div>
+              {% endif %}
+              {% if u.contact_no %}
+                <div class="text-muted small mb-2">{{ u.contact_no }}</div>
+              {% endif %}
+              <div class="small text-muted mb-2">Orders: {{ u.order_count|default:0 }}</div>
+              <div class="d-flex justify-content-center">
+                <form method="post" action="{% url 'admin_delete_user' u.user.id %}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% if not users %}
+        <div class="col-12 text-center text-muted py-5">No users found.</div>
+        {% endif %}
+      </div>
+      </div>
+    </div>
+    </main>
+  </div>
+</body>
+</html>

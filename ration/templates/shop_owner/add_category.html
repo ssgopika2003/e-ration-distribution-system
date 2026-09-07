@@ -1,0 +1,147 @@
+{% extends 'shop_owner/owner_nav.html' %}
+
+{% block shop_owner_content %}
+<!-- Professional Page Header -->
+<div class="page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">
+        <i class="fas fa-tags mr-2"></i>
+        Add Category
+      </h1>
+      <p class="page-subtitle">Create a new category for ration items</p>
+    </div>
+    <a href="{% url 'view_products' %}" class="btn btn-outline-secondary btn-professional">
+      <i class="fas fa-arrow-left mr-2"></i>
+      Back to Products
+    </a>
+  </div>
+</div>
+
+<!-- Add Category Form -->
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-md-10">
+    <div class="form-professional">
+      <div class="card-header">
+        <h4 class="mb-0">
+          <i class="fas fa-plus-circle mr-2"></i>
+          Category Information
+        </h4>
+      </div>
+      
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label for="{{ form.catgory_name.id_for_label }}" class="form-label">
+              <i class="fas fa-tag mr-2 text-primary"></i>
+              Category Name
+            </label>
+            <input type="text" 
+                   class="form-control form-control-professional" 
+                   id="{{ form.catgory_name.id_for_label }}" 
+                   name="{{ form.catgory_name.name }}" 
+                   placeholder="Enter category name (e.g., Rice, Wheat, Oil)"
+                   required>
+            {% if form.catgory_name.errors %}
+              <div class="text-danger mt-2">
+                {% for error in form.catgory_name.errors %}
+                  <small><i class="fas fa-exclamation-circle mr-1"></i>{{ error }}</small>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="d-flex gap-2 justify-content-center">
+              <button type="submit" class="btn btn-primary btn-professional">
+                <i class="fas fa-save mr-2"></i>
+                Save Category
+              </button>
+              <a href="{% url 'view_products' %}" class="btn btn-outline-secondary btn-professional">
+                <i class="fas fa-times mr-2"></i>
+                Cancel
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Form-specific styling */
+.form-label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.form-control-professional {
+  border: 2px solid #e9ecef;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.form-control-professional:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  outline: none;
+}
+
+.form-control-professional::placeholder {
+  color: #6c757d;
+  font-weight: 400;
+}
+
+.btn-professional {
+  font-weight: 600;
+  padding: 0.875rem 2rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  border-width: 2px;
+  font-size: 1rem;
+}
+
+.btn-professional:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary.btn-professional {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+}
+
+.btn-primary.btn-professional:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  border-color: #5a6fd8;
+}
+
+@media (max-width: 768px) {
+  .form-professional {
+    padding: 1.5rem;
+  }
+  
+  .btn-professional {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .page-header {
+    padding: 1.5rem;
+  }
+}
+</style>
+{% endblock %}

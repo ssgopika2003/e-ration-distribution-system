@@ -1,0 +1,68 @@
+{% extends 'shop_owner/owner_nav.html' %}
+
+{% block shop_owner_content %}
+  <main class="admin-content py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5 mb-3">
+          <div class="card p-3 shadow-sm">
+            {% if product.prd_image %}
+              <img src="{{ product.prd_image.url }}" alt="{{ product.prd_name }}" class="prd-image-img img-fluid" />
+            {% else %}
+              <img src="/static/images/phone1.svg" alt="placeholder" class="placeholder-image img-fluid" />
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-7">
+          <h2 class="mb-2">{{ product.prd_name }}</h2>
+          <div class="mb-3 text-muted">Category: {{ product.category.catgory_name }}</div>
+          <div class="mb-4">{{ product.prd_des }}</div>
+          <div class="d-flex align-items-center">
+            <div class="h4 font-weight-bold mr-3">₹{{ product.prd_price }}</div>
+            <div class="ml-3 text-muted">
+              {% with cname=product.category.catgory_name|default:'' %}
+                {% if 'rice' in cname|lower %}
+                  <small>Available: {{ product.quantity }} kg</small>
+                {% elif 'oil' in cname|lower %}
+                  <small>Available: {{ product.quantity }} litre</small>
+                {% elif 'flour' in cname|lower %}
+                  <small>Available: {{ product.quantity }} pcs</small>
+                {% else %}
+                  <small>Available: {{ product.quantity }} units</small>
+                {% endif %}
+              {% endwith %}
+            </div>
+            <div class="ml-3 text-muted">
+              <strong>Quantity:</strong> {{ product.quantity }}
+            </div>
+            {% if request.user.is_superuser %}
+              {% with cat=product.category.catgory_name|lower name=product.prd_name|lower %}
+                {% if cat == 'rice' and product.quantity < 50 %}
+                  <div class="alert alert-warning py-2">Low stock: below 50 kg</div>
+                  <a href="{% url 'admin_send_product_alert' product.id %}" class="btn btn-warning mb-2">Send Alert Now</a>
+                {% elif 'rice' in name and product.quantity < 50 %}
+                  <div class="alert alert-warning py-2">Low stock: below 50 kg</div>
+                  <a href="{% url 'admin_send_product_alert' product.id %}" class="btn btn-warning mb-2">Send Alert Now</a>
+                {% elif cat == 'oil' and product.quantity < 20 %}
+                  <div class="alert alert-warning py-2">Low stock: below 20 litres</div>
+                  <a href="{% url 'admin_send_product_alert' product.id %}" class="btn btn-warning mb-2">Send Alert Now</a>
+                {% elif 'oil' in name and product.quantity < 20 %}
+                  <div class="alert alert-warning py-2">Low stock: below 20 litres</div>
+                  <a href="{% url 'admin_send_product_alert' product.id %}" class="btn btn-warning mb-2">Send Alert Now</a>
+                {% elif cat == 'flour' and product.quantity < 25 %}
+                  <div class="alert alert-warning py-2">Low stock: below 25 kg</div>
+                  <a href="{% url 'admin_send_product_alert' product.id %}" class="btn btn-warning mb-2">Send Alert Now</a>
+                {% elif 'flour' in name and product.quantity < 25 %}
+                  <div class="alert alert-warning py-2">Low stock: below 25 kg</div>
+                  <a href="{% url 'admin_send_product_alert' product.id %}" class="btn btn-warning mb-2">Send Alert Now</a>
+                {% endif %}
+              {% endwith %}
+            {% endif %}
+            <a href="{% url 'edit_product' product.id %}" class="btn btn-outline-primary mr-2">Edit</a>
+            <a href="{% url 'delete_product' product.id %}" class="btn btn-outline-danger">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

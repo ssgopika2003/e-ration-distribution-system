@@ -1,0 +1,6 @@
+{% comment %}Partial used by nav - render category links{% endcomment %}
+{% for c in categories %}
+  <a href="{% url 'category_products' c.id %}">{{ c.catgory_name }}</a>
+{% empty %}
+  <span>No categories</span>
+{% endfor %}

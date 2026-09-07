@@ -1,0 +1,223 @@
+{% extends 'user/user_nav.html' %}
+{% load static %}
+
+{% block user_content %}
+<style>
+  :root { --primary:#312C51; --secondary:#48426D; --peach:#F0C38E; --coral:#F1AA9B; }
+  body { background: linear-gradient(180deg, rgba(240,195,142,0.10) 0%, rgba(241,170,155,0.08) 40%, rgba(72,66,109,0.05) 100%); }
+  
+  .detail-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  }
+  
+  .order-header {
+    text-align: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .order-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .order-status {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  
+  .status-pending { background-color: #fff3cd; color: #856404; }
+  .status-processing { background-color: #cce5ff; color: #004085; }
+  .status-shipped { background-color: #d4edda; color: #155724; }
+  .status-delivered { background-color: #d1ecf1; color: #0c5460; }
+  .status-cancelled { background-color: #f8d7da; color: #721c24; }
+  
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .info-row:last-child { border-bottom: none; }
+  
+  .info-label {
+    font-weight: 600;
+    color: #666;
+  }
+  
+  .product-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+  
+  .product-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-right: 1.5rem;
+  }
+  
+  .no-image {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+  }
+  
+  .total-section {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+  }
+  
+  .btn-back {
+    background: var(--peach);
+    border: none;
+    color: var(--primary);
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-back:hover {
+    background: #eab36a;
+    transform: translateY(-1px);
+    color: var(--primary);
+  }
+</style>
+
+<!-- Include messages -->
+{% include 'messages.html' %}
+
+<div class="container">
+  <div class="detail-card">
+    <div class="order-header">
+      <div class="order-number">Order #{{ order.order_number }}</div>
+      <div class="order-status status-{{ order.status }}">{{ order.get_status_display }}</div>
+      <p class="text-muted mb-0">
+        <i class="fas fa-calendar mr-2"></i>
+        Placed on {{ order.created_at|date:"F d, Y" }} at {{ order.created_at|time:"H:i" }}
+      </p>
+    </div>
+    
+    <!-- Order Information -->
+    <div class="row">
+      <div class="col-md-6">
+        <h5 class="mb-3">
+          <i class="fas fa-user mr-2 text-primary"></i>
+          Customer Information
+        </h5>
+        <div class="info-row">
+          <span class="info-label">Name:</span>
+          <span>{{ order.full_name }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email:</span>
+          <span>{{ order.email }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Phone:</span>
+          <span>{{ order.phone }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Payment Method:</span>
+          <span>{{ order.get_payment_method_display }}</span>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <h5 class="mb-3">
+          <i class="fas fa-map-marker-alt mr-2 text-primary"></i>
+          Delivery Address
+        </h5>
+        <div class="alert alert-light">
+          {{ order.address|linebreaks }}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Products Ordered -->
+    <div class="mt-4">
+      <h5 class="mb-3">
+        <i class="fas fa-box mr-2 text-primary"></i>
+        Products Ordered ({{ order.items.count }})
+      </h5>
+      
+      {% for item in order.items.all %}
+      <div class="product-item">
+        {% if item.product.prd_image %}
+          <img src="{{ item.product.prd_image.url }}" alt="{{ item.product.prd_name }}" class="product-image">
+        {% else %}
+          <div class="no-image">
+            <i class="fas fa-box text-white fa-2x"></i>
+          </div>
+        {% endif %}
+        
+        <div class="flex-grow-1">
+          <h6 class="mb-1">{{ item.product.prd_name }}</h6>
+          <p class="text-muted mb-1">{{ item.product.prd_des|default:"No description" }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted">
+              Quantity: <strong>{{ item.quantity }}</strong>
+            </span>
+            <span class="text-muted">
+              Price: <strong>₹{{ item.price }}</strong>
+            </span>
+            <span class="font-weight-bold text-success">
+              Total: ₹{{ item.get_total_price }}
+            </span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <!-- Order Total -->
+    <div class="mt-4">
+      <div class="total-section">
+        <h4 class="mb-2">
+          <i class="fas fa-receipt mr-2"></i>
+          Order Total
+        </h4>
+        <h2 class="mb-0">₹{{ order.total_amount }}</h2>
+        <small>Including all taxes and charges</small>
+      </div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="text-center mt-4">
+      <a href="{% url 'order_history' %}" class="btn btn-back mr-3">
+        <i class="fas fa-arrow-left mr-2"></i>Back to Orders
+      </a>
+      <a href="{% url 'user_dashboard' %}" class="btn btn-outline-primary">
+        <i class="fas fa-home mr-2"></i>Dashboard
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

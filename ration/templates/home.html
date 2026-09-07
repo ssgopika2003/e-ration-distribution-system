@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% block title %}Home - Kerala Ration Shop - Essential Goods Store{% endblock %}
+{% block content %}
+<!-- Messages -->
+{% include 'messages.html' %}
+
+<!-- Hero Section -->
+<section class="hero-section py-5">
+  <div class="container">
+    <div class="row align-items-center min-vh-50">
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <div class="hero-content">
+          <h1 class="display-4 font-weight-bold text-gradient mb-4">
+            Essential Goods for Your Family
+          </h1>
+          <p class="lead text-muted mb-4">
+            Discover quality ration items, groceries, and household essentials 
+            at affordable prices. Your trusted neighborhood ration shop.
+          </p>
+          <div class="hero-buttons">
+            <a href="#products" class="btn btn-primary btn-lg mr-3 mb-3">
+              <i class="fas fa-shopping-bag mr-2"></i>
+              Shop Now
+            </a>
+            <a href="#features" class="btn btn-outline-primary btn-lg mb-3">
+              <i class="fas fa-info-circle mr-2"></i>
+              Learn More
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-carousel">
+          <div id="heroCarousel" class="carousel slide" data-ride="carousel" data-interval="4000">
+            {% if products %}
+            <ol class="carousel-indicators">
+              {% for product in products %}
+              <li data-target="#heroCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+              {% endfor %}
+            </ol>
+            {% endif %}
+            <div class="carousel-inner border-radius-custom shadow-custom">
+              {% for product in products %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="carousel-content bg-gradient-primary text-center py-5">
+                  <img src="{{ product.prd_image.url }}" class="img-fluid" alt="{{ product.prd_name }}" style="max-height: 400px; object-fit: contain;">
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5 class="text-white font-weight-bold">{{ product.prd_name }}</h5>
+                    <p class="text-white-50">₹{{ product.prd_price }} per unit</p>
+                    {% if product.quantity > 0 %}
+                    <small class="text-success">
+                      <i class="fas fa-check-circle mr-1"></i>
+                      {{ product.quantity }} units available
+                    </small>
+                    {% else %}
+                    <small class="text-warning">
+                      <i class="fas fa-exclamation-triangle mr-1"></i>
+                      Out of stock
+                    </small>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <div class="carousel-item active">
+                <div class="carousel-content bg-gradient-primary text-center py-5">
+                  <div class="d-flex align-items-center justify-content-center" style="height: 400px;">
+                    <div class="text-center text-white">
+                      <i class="fas fa-shopping-basket fa-5x mb-3"></i>
+                      <h5>Essential Ration Items</h5>
+                      <p class="text-white-50">Add products with images to see them here</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5 bg-light">
+  <div class="container">
+    <div class="row text-center mb-5">
+      <div class="col-12">
+        <h2 class="font-weight-bold mb-3">Why Choose Kerala Ration Shop?</h2>
+        <p class="lead text-muted">Experience the difference with our quality products and reliable service</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-award fa-3x text-primary"></i>
+            </div>
+            <h5 class="card-title font-weight-bold">Quality Assurance</h5>
+            <p class="card-text text-muted">Every product is carefully selected and comes with quality guarantee for your family's health.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-truck fa-3x text-success"></i>
+            </div>
+            <h5 class="card-title font-weight-bold">Home Delivery</h5>
+            <p class="card-text text-muted">Convenient home delivery service to your doorstep with safe and secure packaging.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-heart fa-3x text-info"></i>
+            </div>
+            <h5 class="card-title font-weight-bold">Community Service</h5>
+            <p class="card-text text-muted">Serving our community with care and dedication for generations.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products Section -->
+<section id="products" class="py-5">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="font-weight-bold mb-3">Essential Products</h2>
+        <p class="lead text-muted">Discover our collection of quality ration items and household essentials</p>
+      </div>
+    </div>
+    <div class="row">
+      {% for p in all_products %}
+      <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="card product-card h-100 border-0 shadow-sm">
+          <div class="product-image-container">
+            {% if p.prd_image %}
+            <img class="card-img-top" src="{{ p.prd_image.url }}" alt="{{ p.prd_name }}" style="height: 250px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+              <div class="text-center text-muted">
+                <i class="fas fa-shopping-basket fa-3x mb-2"></i>
+                <p class="mb-0">No Image</p>
+              </div>
+            </div>
+            {% endif %}
+            <div class="product-overlay">
+              <a href="{% url 'user_product_detail' p.id %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-eye mr-1"></i>View Details
+              </a>
+            </div>
+          </div>
+          <div class="card-body text-center">
+            <h6 class="card-title font-weight-bold mb-2">{{ p.prd_name }}</h6>
+            <p class="text-muted small mb-2">{{ p.category.catgory_name }}</p>
+            <p class="text-primary font-weight-bold h5 mb-3">₹{{ p.prd_price }}</p>
+            <a href="{% url 'add_to_cart' p.id %}" class="btn btn-outline-primary btn-sm">
+              <i class="fas fa-cart-plus mr-1"></i>Add to Cart
+            </a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <div class="empty-state">
+          <i class="fas fa-shopping-basket fa-5x text-muted mb-4"></i>
+          <h4 class="text-muted mb-3">No Products Available</h4>
+          <p class="text-muted">We're working on adding essential ration items for you. Check back soon!</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% if all_products %}
+    <div class="row mt-4">
+      <div class="col-12 text-center">
+        <a href="{% url 'user_dashboard' %}" class="btn btn-primary btn-lg">
+          <i class="fas fa-th-large mr-2"></i>
+          View All Products
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+.hero-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 70vh;
+}
+
+.min-vh-50 {
+  min-height: 50vh;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.product-card {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+}
+
+.product-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover .product-overlay {
+  opacity: 1;
+}
+
+.feature-icon {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .feature-icon {
+  transform: scale(1.1);
+}
+
+.carousel-content {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.empty-state {
+  padding: 3rem 1rem;
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 60vh;
+  }
+  
+  .display-4 {
+    font-size: 2rem;
+  }
+  
+  .hero-buttons .btn {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+</style>
+{% endblock %}

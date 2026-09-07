@@ -1,0 +1,54 @@
+{% comment %}Partial: displays orders for a given user; expects `orders` in context{% endcomment %}
+<div class="card mt-4">
+  <div class="card-header bg-white">
+    <h5 class="mb-0"><i class="fas fa-receipt mr-2 text-primary"></i>Orders</h5>
+  </div>
+  <div class="card-body p-3">
+    {% if orders and orders.exists %}
+      <div class="table-responsive">
+        <table class="table table-sm table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Shipping</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+            <tr>
+              <td>{{ order.order_number }}</td>
+              <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+              <td>{{ order.items.count }}</td>
+              <td>{{ order.total_amount }}</td>
+              <td>{{ order.payment_method|default:"COD"|upper }}</td>
+              <td>{{ order.get_shipping_option_display|default:"-" }}</td>
+              <td class="d-flex gap-2">
+                
+                {% if request.user.is_staff or request.user.is_superuser %}
+                <form method="post" action="{% url 'update_order_status' order.id %}" class="d-inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.path }}" />
+                  <select name="status" class="form-control form-control-sm d-inline" style="width:140px; display:inline-block;">
+                    {% for k,v in order.STATUS_CHOICES %}
+                      <option value="{{ k }}" {% if order.status == k %}selected{% endif %}>{{ v }}</option>
+                    {% endfor %}
+                  </select>
+                  <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                </form>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-light text-center mb-0">No orders found for this user.</div>
+    {% endif %}
+  </div>
+</div>

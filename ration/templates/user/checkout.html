@@ -1,0 +1,180 @@
+{% extends 'user/user_nav.html' %}
+{% load static %}
+
+{% block user_content %}
+  <!-- Include messages -->
+  {% include 'messages.html' %}
+  
+  <style>
+    :root { --primary:#312C51; --secondary:#48426D; --peach:#F0C38E; --coral:#F1AA9B; }
+    body { background: linear-gradient(180deg, rgba(240,195,142,0.10) 0%, rgba(241,170,155,0.08) 40%, rgba(72,66,109,0.05) 100%); }
+    .checkout-wrapper { max-width: 760px; margin: 30px auto; }
+    .card { border: 0; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+    .card-header { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); border-bottom: 0; text-align: center; color: #fff; border-top-left-radius:16px; border-top-right-radius:16px; }
+    .card-header h2 { font-weight: 700; margin: 0; }
+    .btn-primary { background: var(--peach); border-color: var(--peach); color: var(--primary); font-weight:600; border-radius:8px; }
+    .btn-primary:hover { background: #eab36a; border-color: #eab36a; color: var(--primary); }
+    .modal-header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color:#fff; }
+    .btn-close-primary { background: var(--peach); color: var(--primary); border-color: var(--peach); }
+    
+    /* Success page animations */
+    .success-icon {
+      animation: bounceIn 0.8s ease-out;
+    }
+    
+    @keyframes bounceIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.05); }
+      70% { transform: scale(0.9); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .success-content {
+      animation: slideInUp 0.6s ease-out 0.3s both;
+    }
+    
+    @keyframes slideInUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+
+  <div class="checkout-wrapper">
+    <div class="card">
+      <div class="card-header">
+        <h2>{% if show_success %}Order Confirmation{% else %}Checkout{% endif %}</h2>
+      </div>
+      <div class="card-body p-4">
+        {% if show_success %}
+        <!-- Order Success Display -->
+        <div class="text-center">
+          <div class="mb-4 success-icon">
+            <i class="fas fa-check-circle fa-5x text-success"></i>
+          </div>
+          <div class="success-content">
+            <h3 class="text-success font-weight-bold mb-3">🎉 Order Placed Successfully!</h3>
+          {% if order_summary %}
+          <div class="alert alert-success">
+            <h5><i class="fas fa-clipboard-list mr-2"></i>Order Summary</h5>
+            <p class="mb-1"><strong>Order Number:</strong> {{ order_summary.order_number }}</p>
+            <p class="mb-1"><strong>{{ order_summary.total_products }}</strong> different products ordered</p>
+            <p class="mb-1"><strong>{{ order_summary.total_items }}</strong> total items in your order</p>
+            <p class="mb-0"><strong>Total Amount:</strong> ₹{{ order_summary.total_amount }}</p>
+          </div>
+          {% endif %}
+          <p class="lead mb-4">Thank you for your order! Your ration items will be processed and delivered soon.</p>
+          <div class="d-flex gap-2 justify-content-center">
+            <a href="{% url 'order_history' %}" class="btn btn-primary mr-3">
+              <i class="fas fa-shopping-bag mr-2"></i>View My Orders
+            </a>
+            <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary mr-3">
+              <i class="fas fa-home mr-2"></i>Back to Dashboard
+            </a>
+            <a href="{% url 'cart_page' %}" class="btn btn-outline-primary">
+              <i class="fas fa-shopping-cart mr-2"></i>View Cart
+            </a>
+          </div>
+          </div>
+        </div>
+        {% else %}
+        <!-- Checkout Form -->
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label>Full Name:</label>
+            <input type="text" class="form-control" name="full_name" placeholder="Enter your full name" required>
+          </div>
+          <div class="form-group">
+            <label>Delivery Address:</label>
+            <textarea class="form-control" name="address" rows="3" placeholder="Enter delivery address" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Contact Number:</label>
+            <input type="text" class="form-control" name="phone" placeholder="Enter contact number" required>
+          </div>
+          <div class="form-group">
+            <label>Email:</label>
+            <input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label>Payment Method:</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="payment" id="pmUPI" value="upi" required>
+              <label class="form-check-label" for="pmUPI">UPI</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="payment" id="pmNB" value="netbanking">
+              <label class="form-check-label" for="pmNB">Netbanking</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="payment" id="pmCOD" value="cod">
+              <label class="form-check-label" for="pmCOD">Cash on Delivery</label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">Place Order</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Order Status</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="mb-3">
+            <i class="fas fa-check-circle fa-4x text-success"></i>
+          </div>
+          <h4 class="text-success font-weight-bold mb-3">Order Placed Successfully!</h4>
+          {% if order_summary %}
+          <div class="alert alert-info">
+            <p class="mb-1"><strong>Order Summary:</strong></p>
+            <p class="mb-1">{{ order_summary.total_products }} different products</p>
+            <p class="mb-0">{{ order_summary.total_items }} total items ordered</p>
+          </div>
+          {% endif %}
+          <p class="mb-0">Thank you for shopping with us. Your ration items will be processed soon!</p>
+        </div>
+        <div class="modal-footer">
+          <a href="{% url 'user_dashboard' %}" class="btn btn-primary">Close</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript for success page functionality -->
+  {% if show_success %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Show the modal as backup
+      $('#orderSuccessModal').modal('show');
+      
+      // Optional: Auto redirect after 10 seconds
+      let countdown = 10;
+      const redirectTimer = setInterval(function() {
+        countdown--;
+        if (countdown <= 0) {
+          clearInterval(redirectTimer);
+          window.location.href = "{% url 'user_dashboard' %}";
+        }
+      }, 1000);
+      
+      // Clear timer if user clicks any navigation button
+      document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A') {
+          clearInterval(redirectTimer);
+        }
+      });
+    });
+  </script>
+  {% endif %}
+{% endblock %}
+
+

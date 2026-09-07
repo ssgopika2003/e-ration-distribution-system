@@ -1,0 +1,82 @@
+{% extends 'shop_owner/owner_nav.html' %}
+
+{% block shop_owner_content %}
+<!-- Professional Dashboard Header -->
+<div class="page-header text-center">
+  <h1 class="page-title">{{ title }}</h1>
+  <p class="page-subtitle">{{ subtitle }}</p>
+</div>
+
+<!-- Professional Stats Cards -->
+<div class="row">
+  <div class="col-lg-4 col-md-6 mb-4">
+    <div class="stats-card">
+      <div class="icon text-primary">
+        <i class="fas fa-shopping-basket"></i>
+      </div>
+      <div class="number text-primary">{{ products_count }}</div>
+      <div class="label">Ration Items</div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6 mb-4">
+    <div class="stats-card">
+      <div class="icon text-success">
+        <i class="fas fa-tags"></i>
+      </div>
+      <div class="number text-success">{{ categories_count }}</div>
+      <div class="label">Categories</div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6 mb-4">
+    <div class="stats-card">
+      <div class="icon text-info">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="number text-info">{{ users_count }}</div>
+      <div class="label">Customers</div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="professional-card">
+      <div class="card-header">
+        <h4 class="mb-0">
+          <i class="fas fa-bolt mr-2"></i>
+          Quick Actions
+        </h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3 col-sm-6 mb-3">
+            <a href="{% url 'add_product' %}" class="btn btn-primary btn-professional btn-block">
+              <i class="fas fa-plus-circle mr-2"></i>
+              Add Ration Item
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6 mb-3">
+            <a href="{% url 'add_category' %}" class="btn btn-success btn-professional btn-block">
+              <i class="fas fa-tags mr-2"></i>
+              Add Category
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6 mb-3">
+            <a href="{% url 'view_products' %}" class="btn btn-info btn-professional btn-block">
+              <i class="fas fa-shopping-basket mr-2"></i>
+              View Items
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6 mb-3">
+            <a href="{% url 'view_users' %}" class="btn btn-warning btn-professional btn-block">
+              <i class="fas fa-users mr-2"></i>
+              View Customers
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

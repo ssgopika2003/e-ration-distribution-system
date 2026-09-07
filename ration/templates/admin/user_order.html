@@ -1,0 +1,41 @@
+<div class="card shadow border-0"></div>
+  <div class="card-header" style="background:linear-gradient(135deg,#312C51,#48426D);color:#fff;border-top-left-radius:16px;border-top-right-radius:16px;">
+    <h5 class="mb-0">Order History</h5>
+  </div>
+  <div class="card-body">
+    {% if orders %}
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th class="text-right">Total</th>
+              <th>Items</th>
+              <th>Payment</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in orders %}
+              <tr>
+                <td>{{ o.order_number }}</td>
+                <td>{{ o.created_at|date:'M d, Y H:i' }}</td>
+                <td><span class="badge badge-info text-capitalize">{{ o.status }}</span></td>
+                <td class="text-right">₹{{ o.total_amount }}</td>
+                <td>
+                  {% for it in o.items.all %}
+                    <div class="small">{{ it.quantity }} x {{ it.product.prd_name }}</div>
+                  {% endfor %}
+                </td>
+                <td class="text-capitalize">{{ o.payment_method }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="text-muted">No orders placed yet.</div>
+    {% endif %}
+  </div>
+</div>

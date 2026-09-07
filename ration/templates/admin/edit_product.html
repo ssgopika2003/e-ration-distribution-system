@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Product - {{ product.prd_name }} - Delight Mobiles</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body style="background:linear-gradient(180deg, rgba(240,195,142,0.10) 0%, rgba(241,170,155,0.08) 40%, rgba(72,66,109,0.05) 100%);">
+  <div class="admin-main-content" style="min-height:100vh;">
+  {% include 'admin/admin_nav.html' %}
+
+    <main class="py-4">
+    <div class="admin-content">
+      <!-- Messages for this page only -->
+      {% include 'messages.html' %}
+      <div class="card shadow border-0" style="max-width:720px;margin:0 auto;border-radius:16px;">
+        <div class="card-header text-center" style="background:linear-gradient(135deg,#312C51,#48426D);color:#fff;border-top-left-radius:16px;border-top-right-radius:16px;">
+          <h4 class="mb-0">Edit Product</h4>
+        </div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="id_prd_name">Product name:</label>
+              <input type="text" name="prd_name" class="form-control" id="id_prd_name" value="{{ product.prd_name }}" placeholder="Enter product name">
+            </div>
+            <div class="form-group">
+              <label for="id_prd_des">Product description:</label>
+              <textarea name="prd_des" class="form-control" id="id_prd_des" rows="3" placeholder="Enter product description">{{ product.prd_des }}</textarea>
+            </div>
+            <div class="form-group">
+              <label for="id_prd_price">Product price:</label>
+              <input type="number" name="prd_price" class="form-control" id="id_prd_price" value="{{ product.prd_price }}" placeholder="Enter price">
+            </div>
+            <div class="form-group">
+              <label for="id_category">Category:</label>
+              <select name="category" class="form-control" id="id_category">
+                <option value="">---------</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == product.category.id %}selected{% endif %}>{{ category.catgory_name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="id_prd_image">Product image:</label>
+              {% if product.prd_image %}
+                <div class="mb-2">
+                  <small class="text-muted">Current image:</small><br>
+                  <img src="{{ product.prd_image.url }}" style="max-height:100px;border-radius:6px;">
+                </div>
+              {% endif %}
+              <input type="file" name="prd_image" class="form-control-file" id="id_prd_image">
+              <small class="text-muted">Leave empty to keep current image</small>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+              <a href="{% url 'product_detail' product.id %}" class="btn btn-secondary">Cancel</a>
+              <button class="btn btn-danger" type="submit">Update Product</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,324 @@
+{% extends 'user/user_nav.html' %}
+{% load static %}
+
+{% block user_content %}
+  <style>
+    body{background:linear-gradient(180deg, rgba(240,195,142,0.10) 0%, rgba(241,170,155,0.08) 40%, rgba(72,66,109,0.05) 100%)}
+    
+    /* Card Type Display Styles */
+    .card-type-display {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 16px;
+      text-align: center;
+      min-width: 200px;
+      border: 2px solid #dee2e6;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 8px;
+    }
+    
+    .card-type-white {
+      background-color: white;
+      color: #333;
+      border-color: #ccc;
+    }
+    
+    .card-type-pink {
+      background-color: #ff69b4;
+      color: white;
+      border-color: #ff1493;
+    }
+    
+    .card-type-yellow {
+      background-color: #ffd700;
+      color: #333;
+      border-color: #ffcc00;
+    }
+    
+    .card-type-cream {
+      background-color: #f5f5dc;
+      color: #333;
+      border-color: #e6e6d3;
+    }
+    
+    .card-type-gray {
+      background-color: #f8f9fa;
+      color: #666;
+      border-color: #dee2e6;
+    }
+    
+    /* Mobile-specific improvements */
+    @media (max-width: 768px) {
+      main {
+        padding: 20px 15px !important;
+        max-width: 100% !important;
+      }
+      .btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+      .form-control {
+        font-size: 16px;
+        padding: 12px 15px;
+      }
+      .card-type-display {
+        min-width: 100%;
+        font-size: 14px;
+      }
+    }
+  </style>
+
+  <!-- Messages for this page only -->
+  {% include 'messages.html' %}
+
+  <main style="padding:40px;max-width:800px;margin:0 auto;">
+      <h2 style="color: #333; margin-bottom: 30px; text-align: center;">Edit Profile</h2>
+      
+      <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="username" style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Username</label>
+            <input type="text" class="form-control" id="username" value="{{ profile.user.username }}" readonly style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 12px 15px;">
+            <small class="form-text text-muted">Username cannot be changed</small>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="email" style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Email</label>
+            <input type="email" class="form-control" id="email" value="{{ profile.user.email }}" readonly style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 12px 15px;">
+            <small class="form-text text-muted">Email cannot be changed</small>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="address" style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Address</label>
+            <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter your address" style="border: 1px solid #dee2e6; border-radius: 8px; padding: 12px 15px; resize: vertical;">{{ profile.address|default:"" }}</textarea>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="contact_no" style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Contact Number</label>
+            <input type="text" class="form-control" id="contact_no" name="contact_no" value="{{ profile.contact_no|default:"" }}" placeholder="Enter your contact number" style="border: 1px solid #dee2e6; border-radius: 8px; padding: 12px 15px;">
+          </div>
+
+          <!-- Card Type Display -->
+          {% if profile.card_type %}
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Ration Card Type</label>
+            <div class="card-type-display card-type-{{ profile.card_type.color|default:'gray' }}">
+              {{ profile.card_type.code }} - {{ profile.card_type.name }}
+            </div>
+            <small class="form-text text-muted d-block mt-2">Your assigned ration card category</small>
+          </div>
+          {% else %}
+          <div class="form-group" style="margin-bottom: 20px;">
+            <div class="alert alert-warning" style="border-radius: 8px;">
+              <i class="fas fa-exclamation-triangle mr-2"></i>
+              <strong>Card Type Not Assigned:</strong> Please contact the shop owner or administrator to assign your ration card type.
+            </div>
+          </div>
+          {% endif %}
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="image" style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Profile Image</label>
+            {% if profile.image %}
+              <div style="margin-bottom: 15px;">
+                <img src="{{ profile.image.url }}" alt="Current Profile Image" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #dee2e6;">
+                <p style="margin-top: 8px; color: #6c757d; font-size: 14px;">Current image</p>
+              </div>
+            {% endif %}
+            <input type="file" class="form-control-file" id="image" name="image" accept="image/*" style="border: 1px solid #dee2e6; border-radius: 8px; padding: 8px;">
+            <small class="form-text text-muted">Upload a new profile image (optional)</small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="ration_card_front" style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Ration Card Front</label>
+            {% if profile.ration_card_front %}
+              <div style="margin-bottom: 15px;">
+                <img src="{{ profile.ration_card_front.url }}" alt="Ration Front" style="width: 150px; border-radius: 6px; object-fit: cover; border: 2px solid #dee2e6;">
+              </div>
+            {% endif %}
+            <input type="file" class="form-control-file" id="ration_card_front" name="ration_card_front" accept="image/*">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="ration_card_back" style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Ration Card Back</label>
+            {% if profile.ration_card_back %}
+              <div style="margin-bottom: 15px;">
+                <img src="{{ profile.ration_card_back.url }}" alt="Ration Back" style="width: 150px; border-radius: 6px; object-fit: cover; border: 2px solid #dee2e6;">
+              </div>
+            {% endif %}
+            <input type="file" class="form-control-file" id="ration_card_back" name="ration_card_back" accept="image/*">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="family_members" style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Family Members</label>
+            <input type="number" class="form-control" id="family_members" name="family_members" value="{{ profile.members.count }}" min="0" max="20">
+            <small class="form-text text-muted">Set the total number and fill details below after saving.</small>
+          </div>
+
+          <!-- Editable family members list -->
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Family Member Details</label>
+            <div id="membersContainer">
+              {% for m in profile.members.all %}
+              <div class="member-row mb-3 p-3 border rounded" data-index="{{ forloop.counter0 }}">
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label>Name</label>
+                    <input type="text" name="member_name_{{ forloop.counter0 }}" class="form-control" value="{{ m.name }}" placeholder="Full name" />
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Gender</label>
+                    <select name="member_gender_{{ forloop.counter0 }}" class="form-control">
+                      <option value="" {% if not m.gender %}selected{% endif %}>Select</option>
+                      <option value="Male" {% if m.gender == 'Male' %}selected{% endif %}>Male</option>
+                      <option value="Female" {% if m.gender == 'Female' %}selected{% endif %}>Female</option>
+                      <option value="Other" {% if m.gender == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Date of Birth</label>
+                    <input type="date" name="member_dob_{{ forloop.counter0 }}" class="form-control" value="{% if m.dob %}{{ m.dob|date:'Y-m-d' }}{% endif %}" />
+                  </div>
+                  <div class="form-group col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-danger btn-sm remove-member">Remove</button>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="mt-2">
+              <button type="button" id="addMemberBtn" class="btn btn-outline-primary btn-sm">Add Member</button>
+              <small class="form-text text-muted">You can edit up to <strong>{{ family_max|default:20 }}</strong> members.</small>
+            </div>
+          </div>
+          
+          <div style="margin-top: 30px; text-align: center;">
+            <button class="btn btn-primary" type="submit" style="border-radius:8px;font-weight:600; padding: 12px 30px; margin-right: 10px;">
+              <i class="fas fa-save mr-1"></i>Save Changes
+            </button>
+            <a href="{% url 'user_profile' %}" class="btn btn-secondary" style="border-radius:8px;font-weight:600; padding: 12px 30px;">
+              <i class="fas fa-times mr-1"></i>Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </main>
+  <script>
+      (function(){
+        const container = document.getElementById('membersContainer');
+        const addBtn = document.getElementById('addMemberBtn');
+        const familyCount = document.getElementById('family_members');
+
+        function updateCount(){
+          const cnt = container.querySelectorAll('.member-row').length;
+          if(familyCount) familyCount.value = cnt;
+        }
+
+        function makeRow(index, name='', gender='', dob=''){
+          const div = document.createElement('div');
+          div.className = 'member-row mb-3 p-3 border rounded';
+          div.setAttribute('data-index', index);
+          div.innerHTML = `\
+            <div class="form-row">\
+              <div class="form-group col-md-4">\
+                <label>Name</label>\
+                <input type="text" name="member_name_${index}" class="form-control" value="${name}" placeholder="Full name" />\
+              </div>\
+              <div class="form-group col-md-3">\
+                <label>Gender</label>\
+                <select name="member_gender_${index}" class="form-control">\
+                  <option value="" ${!gender? 'selected':''}>Select</option>\
+                  <option value="Male" ${gender=='Male'? 'selected':''}>Male</option>\
+                  <option value="Female" ${gender=='Female'? 'selected':''}>Female</option>\
+                  <option value="Other" ${gender=='Other'? 'selected':''}>Other</option>\
+                </select>\
+              </div>\
+              <div class="form-group col-md-3">\
+                <label>Date of Birth</label>\
+                <input type="date" name="member_dob_${index}" class="form-control" value="${dob}" />\
+              </div>\
+              <div class="form-group col-md-2 d-flex align-items-end">\
+                <button type="button" class="btn btn-danger btn-sm remove-member">Remove</button>\
+              </div>\
+            </div>`;
+          return div;
+        }
+
+        addBtn.addEventListener('click', function(){
+          const idx = container.querySelectorAll('.member-row').length;
+          const max = parseInt('{{ family_max|default:20 }}');
+          if (idx >= max){
+            alert('Maximum ' + max + ' family members allowed.');
+            return;
+          }
+          container.appendChild(makeRow(idx));
+          updateCount();
+        });
+
+        container.addEventListener('click', function(e){
+          if(e.target && e.target.classList.contains('remove-member')){
+            const row = e.target.closest('.member-row');
+            if(!row) return;
+            // confirm removal
+            if(!confirm('Remove this family member?')) return;
+            row.remove();
+            // re-index inputs names to be sequential
+            const rows = container.querySelectorAll('.member-row');
+            rows.forEach(function(r,i){
+              r.setAttribute('data-index', i);
+              const nameInput = r.querySelector('input[name^="member_name_"]');
+              const genderSelect = r.querySelector('select[name^="member_gender_"]');
+              const dobInput = r.querySelector('input[name^="member_dob_"]');
+              if(nameInput) nameInput.name = `member_name_${i}`;
+              if(genderSelect) genderSelect.name = `member_gender_${i}`;
+              if(dobInput) dobInput.name = `member_dob_${i}`;
+            });
+            updateCount();
+          }
+        });
+
+        // ensure initial count is correct
+        updateCount();
+
+        // client-side validation before submit
+        const form = document.querySelector('form');
+        if (form) {
+          form.addEventListener('submit', function(e){
+            // ensure family_members matches rows
+            updateCount();
+            const rows = container.querySelectorAll('.member-row');
+            const today = new Date();
+            for (let i=0;i<rows.length;i++){
+              const r = rows[i];
+              const nameInput = r.querySelector(`input[name^="member_name_"]`);
+              const dobInput = r.querySelector(`input[name^="member_dob_"]`);
+              const name = nameInput && nameInput.value.trim();
+              if (!name){
+                alert(`Please enter a name for member ${i+1}`);
+                nameInput.focus();
+                e.preventDefault();
+                return false;
+              }
+              if (dobInput && dobInput.value){
+                const d = new Date(dobInput.value);
+                // if dob is in future
+                if (d > today){
+                  alert(`Date of birth for member ${i+1} cannot be in the future.`);
+                  dobInput.focus();
+                  e.preventDefault();
+                  return false;
+                }
+              }
+            }
+            return true;
+          });
+        }
+      })();
+    </script>
+{% endblock %}

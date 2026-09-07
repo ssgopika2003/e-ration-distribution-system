@@ -1,0 +1,57 @@
+{% extends 'shop_owner/owner_nav.html' %}
+
+{% block shop_owner_content %}
+<main class="admin-content py-4">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Edit Product</h2>
+      <a href="{% url 'view_products' %}" class="btn btn-outline-secondary">Back</a>
+    </div>
+    {% include 'messages.html' %}
+    <div class="card p-3 shadow-sm">
+      <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div>
+          {{ form.prd_name.label_tag }}
+          {{ form.prd_name }}
+        </div>
+        <div>
+          {{ form.prd_des.label_tag }}
+          {{ form.prd_des }}
+        </div>
+        <div>
+          {{ form.prd_price.label_tag }}
+          {{ form.prd_price }}
+        </div>
+        <div>
+          {{ form.category.label_tag }}
+          {{ form.category }}
+        </div>
+        <div>
+          {{ form.prd_image.label_tag }}
+          {{ form.prd_image }}
+        </div>
+        <div class="d-flex align-items-center">
+          {{ form.quantity.label_tag }}
+          {{ form.quantity }}
+          <span id="edit-quantity-unit" class="ml-2 text-muted">units</span>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Save</button>
+      </form>
+    </div>
+    <script>
+      (function(){
+        const units = { 'rice':'kg', 'oil':'litre', 'flour':'pcs' };
+        const cat = document.getElementById('id_category');
+        const unitEl = document.getElementById('edit-quantity-unit');
+        function setUnit(){
+          if(!cat) return;
+          const selected = cat.options[cat.selectedIndex]?.text?.toLowerCase() || '';
+          for(const k in units){ if(selected.includes(k)){ unitEl.textContent = units[k]; return; } }
+          unitEl.textContent = 'units';
+        }
+        if(cat){ cat.addEventListener('change', setUnit); setUnit(); }
+      })();
+    </script>
+  </div>
+</main>
+{% endblock %}
