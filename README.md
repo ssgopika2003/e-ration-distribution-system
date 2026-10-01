@@ -1,249 +1,113 @@
-E_Ration
+# E-Ration Distribution System
 
+## Overview
 
-# 🛒 Kerala Ration Shop
+A Django-based e-ration and grocery distribution system with customer authentication, product and stock management, shopping cart, order management, and administration for shop owners and site administrators.
 
-A modern and user-friendly **online ration shop and grocery e-commerce website** developed using **Django**.
+## Features
 
-The application allows customers to explore essential ration items, groceries, and household products, create customer accounts, and shop conveniently through an attractive web interface.
+- Customer registration, authentication, and profile management
+- Ration and grocery product catalog with inventory tracking
+- Shopping cart and checkout
+- Order placement, history, and management
+- Shop-owner dashboard for products and customer orders
+- Django Admin and site-administrator tools
+- SQLite database for local development
 
----
+## Technology Stack
 
-## 📸 Project Screenshots
+- Python and Django
+- SQLite
+- HTML, CSS, and JavaScript
+- Bootstrap and Font Awesome
 
-### 🏠 Home Page
+## Screenshots
 
-The home page provides a clean and modern landing page for the Kerala Ration Shop, with navigation, promotional content, and quick access to shopping.
+### Home
 
-![Kerala Ration Shop Home Page](screenshots/home.png)
+<img src="screenshots/home.png" alt="E-Ration home page" width="720">
 
----
+### Login
 
-### ⭐ Why Choose Kerala Ration Shop
+<img src="screenshots/login.png" alt="Customer login page" width="720">
 
-The website highlights important services such as:
+### Customer Dashboard
 
-- Quality Assurance
-- Home Delivery
-- Community Service
-- Affordable essential products
-- Reliable customer service
+<img src="screenshots/dashboard.png" alt="Customer dashboard with sample products" width="720">
 
-![Why Choose Kerala Ration Shop](screenshots/features.png)
+### Product and Stock Management
 
----
+<img src="screenshots/products.png" alt="Shop-owner product and stock management" width="720">
 
-### 👤 Customer Registration
+### Cart and Orders
 
-Customers can create an account by providing their personal information and joining the Kerala Ration Shop.
+<img src="screenshots/cart.png" alt="Shopping cart with order summary" width="720">
 
-![Create Customer Account](screenshots/customer-registration.png)
+### Admin and Reporting
 
----
+<img src="screenshots/admin.png" alt="Site administration dashboard" width="720">
 
-### 💻 Project Structure
+Screenshots use fictional demo accounts and sample products.
 
-The project is developed using Django with separate applications, templates, static files, media files, and database management.
-
-![Project Structure](screenshots/project-structure.png)
-
----
-
-## 🚀 Features
-
-- 🛍️ Online ration and grocery shopping
-- 👤 Customer account registration
-- 🔐 User authentication
-- 📦 Product management
-- 🛒 Shopping cart functionality
-- 💳 Order management
-- 🚚 Home delivery information
-- 📱 Responsive user interface
-- 🎨 Modern and attractive design
-- 🏪 Admin management through Django Admin
-- 🗄️ SQLite database support
-
----
-
-## 🛠️ Technologies Used
-
-### Frontend
-
-- HTML5
-- CSS3
-- JavaScript
-- Responsive Web Design
-
-### Backend
-
-- Python
-- Django
-
-### Database
-
-- SQLite3
-
-### Development Tools
-
-- Visual Studio Code
-- Git
-- GitHub
-
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```text
-ration/
-│
-├── ecomapp/
-│   ├── migrations/
-│   ├── templatetags/
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── context_processors.py
-│   ├── forms.py
-│   ├── models.py
-│   ├── tests.py
-│   ├── urls.py
-│   ├── utils.py
-│   └── views.py
-│
-├── media/
-├── scripts/
-├── static/
-├── templates/
-├── tools/
-├── venv/
-│
+.
+├── E_Ration/                 # Existing Git submodule
+├── ration/
+│   ├── ecom/                 # Django project settings and URL configuration
+│   ├── ecomapp/              # Application models, views, forms, and migrations
+│   ├── media/                # Local product uploads and user uploads
+│   ├── scripts/              # Project scripts
+│   ├── static/               # CSS and static images
+│   ├── templates/            # Django templates
+│   ├── tools/                # Development and maintenance utilities
+│   └── manage.py
+├── screenshots/              # README screenshots
 ├── .gitignore
-├── db.sqlite3
-├── manage.py
 └── README.md
+```
 
-2. Navigate to the project directory
-cd ration
+## Installation
 
-3. Create a virtual environment
-python -m venv venv
+1. Install Python 3.10 or later.
+2. From the repository root, enter the Django project and create a virtual environment:
 
-4. Activate the virtual environment
-Windows PowerShell
-venv\Scripts\Activate.ps1
+   ```powershell
+   cd ration
+   python -m venv venv
+   .\venv\Scripts\Activate.ps1
+   ```
 
-Windows Command Prompt
-venv\Scripts\activate
+3. Install Django:
 
-5. Install dependencies
-If a requirements.txt file is available:
+   ```powershell
+   python -m pip install "Django>=5.2,<5.3"
+   ```
 
-pip install -r requirements.txt
+4. Set a secret key for the current PowerShell session:
 
-Otherwise install Django:
+   ```powershell
+   $env:DJANGO_SECRET_KEY = python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+   ```
 
-pip install django
+   Set `DJANGO_SECRET_KEY` through your deployment environment in production. Do not commit `.env` files or production secrets.
 
-6. Apply database migrations
+## How to Run
+
+With the virtual environment activated and `DJANGO_SECRET_KEY` set, run:
+
+```powershell
 python manage.py migrate
-
-7. Create an admin user
 python manage.py createsuperuser
-
-Follow the instructions to create your administrator account.
-
-8. Run the development server
 python manage.py runserver
+```
 
-Open the application in your browser:
+Open <http://127.0.0.1:8000/> for the application. Django Admin is available at <http://127.0.0.1:8000/admin/>.
 
-http://127.0.0.1:8000/
+## What I Learned
 
-👨‍💼 Admin Panel
-Django Admin can be accessed through:
-
-http://127.0.0.1:8000/admin/
-
-The administrator can manage products, customers, orders, and other application data through the Django administration interface.
-
-Purpose of the Project
-The purpose of this project is to provide a simple and convenient online platform for purchasing:
-
-Ration products
-Groceries
-Household essentials
-Daily-use products
-The project demonstrates how Django can be used to build a complete e-commerce-style web application with customer management, product management, and order-related functionality.
-
-🌟 Future Improvements
-Some possible improvements for future versions include:
-
-Online payment gateway integration
-Order tracking
-Product reviews and ratings
-Wishlist functionality
-Email notifications
-SMS notifications
-Advanced product search
-Product filtering
-Delivery tracking
-Customer order history
-Deployment to a production server
-📌 Project Status
-Status: Completed / Under Development
-
-The project is actively being improved with additional features and UI enhancements.
-
-👨‍💻 Developer
-Developed using Python and Django.
-
-📄 License
-This project is created for educational and development purposes.
-
-
-## 3. Very important — upload the screenshots
-
-In VS Code, create:
-
-```text
-screenshots
-
-Then put your four images inside it.
-
-Your README references them like this:
-
-![Kerala Ration Shop Home Page](screenshots/home.png)
-
-GitHub will automatically display the image when the file exists at that location.
-
-4. Then push everything to GitHub
-From your current terminal:
-
-git add .
-git commit -m "Add project README and screenshots"
-git push
-
-You should see something similar to:
-
-Writing objects...
-To github.com:...
-   master -> master
-
-Then refresh your GitHub repository. Your README will appear on the repository's front page with the screenshots.
-
-One small recommendation
-I would not upload venv/ or db.sqlite3 to GitHub for a professional project. Your .gitignore should normally include:
-
-venv/
-__pycache__/
-*.pyc
-db.sqlite3
-.env
-
-Project Name: E-Ration – Smart Ration Distribution System
-
-Repository: E_Ration
-
-Purpose: Academic / Project Development
-
- 
+- Building multi-role authentication and permissions with Django
+- Modeling customers, products, inventory, carts, and orders with the Django ORM
+- Connecting templates and static assets to database-backed views
+- Using migrations and Django Admin to maintain application data
